@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Involved | External Excellencies Global Foundation</title>
+<meta name="description" content="Donate, partner, volunteer or support a specific program with External Excellencies Global Foundation.">
+<meta property="og:title" content="Get Involved — External Excellencies Global Foundation">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="get-involved.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">External Excellencies<span>Global Foundation</span></a>
+    <nav class="main-nav" id="main-nav" aria-label="Primary">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li class="has-dropdown">
+          <a href="about.html">About Us</a>
+          <button class="dropdown-toggle" aria-expanded="false" aria-label="Show About Us submenu"><span></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="about.html#story">Our Story</a></li>
+            <li><a href="about.html#values">Our Values</a></li>
+            <li><a href="about.html#founder">Meet the Founder</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="our-work.html">Our Work</a>
+          <button class="dropdown-toggle" aria-expanded="false" aria-label="Show Our Work submenu"><span></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="our-work.html#women">Women's Empowerment</a></li>
+            <li><a href="our-work.html#youth">Youth Development</a></li>
+            <li><a href="our-work.html#health">Health</a></li>
+            <li><a href="our-work.html#education">Education</a></li>
+            <li><a href="our-work.html#economic">Economic Empowerment</a></li>
+            <li><a href="our-work.html#leadership">Leadership</a></li>
+            <li><a href="our-work.html#community">Community</a></li>
+          </ul>
+        </li>
+        <li><a href="impact.html">Our Impact</a></li>
+        <li class="has-dropdown">
+          <a href="get-involved.html" class="active">Get Involved</a>
+          <button class="dropdown-toggle" aria-expanded="false" aria-label="Show Get Involved submenu"><span></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="get-involved.html#donate">Donate</a></li>
+            <li><a href="get-involved.html#partner">Partner</a></li>
+            <li><a href="get-involved.html#volunteer">Volunteer</a></li>
+            <li><a href="get-involved.html#support-program">Support a Program</a></li>
+            <li><a href="get-involved.html#advocate">Advocate</a></li>
+          </ul>
+        </li>
+        <li><a href="stories.html">Stories &amp; News</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a href="get-involved.html#donate" class="btn btn-donate">Donate</a>
+      <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="gi-intro">
+    <div class="gi-intro-inner">
+      <p class="hero-kicker">Get Involved</p>
+      <h1>Four ways in. One shared goal.</h1>
+    </div>
+  </section>
+
+  <nav class="program-jump" aria-label="Jump to section">
+    <ul>
+      <li><a href="#donate">Donate</a></li>
+      <li><a href="#partner">Partner</a></li>
+      <li><a href="#volunteer">Volunteer</a></li>
+      <li><a href="#support-program">Support a Program</a></li>
+    </ul>
+  </nav>
+
+  <!-- ============ DONATE ============ -->
+  <section class="gi-section" id="donate">
+    <div class="gi-inner">
+      <p class="section-eyebrow">Donate</p>
+      <h2>Your support can create a pathway to possibility.</h2>
+      <p class="gi-lede">Donations go toward women's empowerment, youth development, healthcare, education, skills training and community programs — the seven areas of work described on <a href="our-work.html">Our Work</a>.</p>
+
+      <div class="donate-options">
+        <button class="donate-option is-active" data-amount="one-time">One-time</button>
+        <button class="donate-option" data-amount="monthly">Monthly</button>
+      </div>
+
+      <div class="donate-panel">
+        <label for="donate-purpose">What should this support?</label>
+        <select id="donate-purpose">
+          <option>Wherever it's needed most</option>
+          <option>Women Empowerment</option>
+          <option>Youth Development</option>
+          <option>Health &amp; Wellness</option>
+          <option>Education &amp; Skills</option>
+          <option>Economic Empowerment</option>
+          <option>Leadership Development</option>
+          <option>Community Development</option>
+        </select>
+
+        <label for="donate-custom">Amount</label>
+        <div class="amount-row">
+          <button class="amount-chip">$10</button>
+          <button class="amount-chip">$25</button>
+          <button class="amount-chip">$50</button>
+          <input type="number" id="donate-custom" placeholder="Custom amount" min="1">
+        </div>
+
+        <p class="payment-methods-label">Payment method</p>
+        <div class="payment-methods">
+          <span class="payment-chip payment-chip--ghost">[M-Pesa — connect payment handler]</span>
+          <span class="payment-chip payment-chip--ghost">[Card — connect payment handler]</span>
+          <span class="payment-chip payment-chip--ghost">[Bank transfer — add details]</span>
+        </div>
+
+        <p class="donate-note">Payment processing isn't connected yet. Before this goes live, plug in a real payment provider (e.g. Paystack, Flutterwave, or an M-Pesa paybill/till number) — this page is deliberately not collecting money until that's verified and in place.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PARTNER ============ -->
+  <section class="gi-section gi-section--alt" id="partner">
+    <div class="gi-inner">
+      <p class="section-eyebrow">Partner with us</p>
+      <h2>Partnerships that create sustainable community impact.</h2>
+      <p class="gi-lede">We work with a range of organizations to extend what any one group could do alone.</p>
+
+      <div class="partner-categories">
+        <span>Corporates</span>
+        <span>Foundations</span>
+        <span>Government</span>
+        <span>Healthcare institutions</span>
+        <span>Development organizations</span>
+        <span>Community organizations</span>
+        <span>Educational institutions</span>
+      </div>
+
+      <a href="contact.html?reason=partnership" class="btn btn-primary">Start a Partnership</a>
+    </div>
+  </section>
+
+  <!-- ============ VOLUNTEER ============ -->
+  <section class="gi-section" id="volunteer">
+    <div class="gi-inner">
+      <p class="section-eyebrow">Volunteer</p>
+      <h2>Contribute your skills and expertise.</h2>
+      <p class="gi-lede">Tell us where you'd like to help, and we'll get in touch about current opportunities.</p>
+
+      <form class="volunteer-form" action="#" method="post">
+        <div class="form-row">
+          <label for="v-name">Full name</label>
+          <input type="text" id="v-name" name="name" required>
+        </div>
+        <div class="form-row form-row--split">
+          <div>
+            <label for="v-email">Email</label>
+            <input type="email" id="v-email" name="email" required>
+          </div>
+          <div>
+            <label for="v-phone">Phone</label>
+            <input type="tel" id="v-phone" name="phone">
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Areas of interest</label>
+          <div class="checkbox-grid">
+            <label><input type="checkbox" name="interest" value="medical"> Medical outreach</label>
+            <label><input type="checkbox" name="interest" value="training"> Training</label>
+            <label><input type="checkbox" name="interest" value="mentorship"> Mentorship</label>
+            <label><input type="checkbox" name="interest" value="media"> Media</label>
+            <label><input type="checkbox" name="interest" value="technology"> Technology</label>
+            <label><input type="checkbox" name="interest" value="admin"> Administration</label>
+            <label><input type="checkbox" name="interest" value="mobilization"> Community mobilization</label>
+            <label><input type="checkbox" name="interest" value="expertise"> Professional expertise</label>
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="v-message">Tell us more (optional)</label>
+          <textarea id="v-message" name="message" rows="4"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit interest</button>
+        <p class="form-note">This form has no backend connected yet — wire it to a form service (e.g. Formspree) before publishing.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ SUPPORT A PROGRAM ============ -->
+  <section class="gi-section gi-section--alt" id="support-program">
+    <div class="gi-inner">
+      <p class="section-eyebrow">Support a program</p>
+      <h2>Choose exactly what you want your support to go toward.</h2>
+      <div class="program-choice-grid">
+        <a href="our-work.html#women" class="program-choice">Women</a>
+        <a href="our-work.html#youth" class="program-choice">Youth</a>
+        <a href="our-work.html#health" class="program-choice">Health</a>
+        <a href="our-work.html#education" class="program-choice">Education</a>
+        <a href="our-work.html#economic" class="program-choice">Entrepreneurship</a>
+        <a href="our-work.html#community" class="program-choice">Community Development</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ADVOCATE ============ -->
+  <section class="gi-section" id="advocate">
+    <div class="gi-inner">
+      <p class="section-eyebrow">Advocate</p>
+      <h2>Help amplify stories and opportunities.</h2>
+      <p class="gi-lede">Share our work, follow us on social media, and help the right people hear about what's happening.</p>
+      <div class="advocate-links">
+        <a href="#">[Facebook]</a>
+        <a href="#">[Instagram]</a>
+        <a href="#">[LinkedIn]</a>
+        <a href="#">[X / Twitter]</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <p class="footer-name">External Excellencies<br>Global Foundation</p>
+      <p class="footer-mission">Building pathways for women, youth and communities to thrive.</p>
+      <form class="newsletter-form" action="#" method="post">
+        <label for="newsletter-email">Stay connected</label>
+        <p class="newsletter-sub">Receive stories, updates and opportunities from the Foundation.</p>
+        <div class="newsletter-row">
+          <input type="email" id="newsletter-email" name="email" placeholder="Your email address" required>
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </div>
+        <p class="newsletter-consent">By subscribing you agree to receive occasional emails from us. Unsubscribe anytime.</p>
+      </form>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul>
+          <li class="has-dropdown">
+          <a href="about.html">About Us</a>
+          <button class="dropdown-toggle" aria-expanded="false" aria-label="Show About Us submenu"><span></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="about.html#story">Our Story</a></li>
+            <li><a href="about.html#values">Our Values</a></li>
+            <li><a href="about.html#founder">Meet the Founder</a></li>
+          </ul>
+        </li>
+          <li class="has-dropdown">
+          <a href="our-work.html">Our Work</a>
+          <button class="dropdown-toggle" aria-expanded="false" aria-label="Show Our Work submenu"><span></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="our-work.html#women">Women's Empowerment</a></li>
+            <li><a href="our-work.html#youth">Youth Development</a></li>
+            <li><a href="our-work.html#health">Health</a></li>
+            <li><a href="our-work.html#education">Education</a></li>
+            <li><a href="our-work.html#economic">Economic Empowerment</a></li>
+            <li><a href="our-work.html#leadership">Leadership</a></li>
+            <li><a href="our-work.html#community">Community</a></li>
+          </ul>
+        </li>
+          <li><a href="impact.html">Our Impact</a></li>
+          <li><a href="stories.html">Stories &amp; News</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Programs</h4>
+        <ul>
+          <li><a href="our-work.html#women">Women Empowerment</a></li>
+          <li><a href="our-work.html#youth">Youth Development</a></li>
+          <li><a href="our-work.html#health">Health &amp; Wellness</a></li>
+          <li><a href="our-work.html#education">Education &amp; Skills</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Get Involved</h4>
+        <ul>
+          <li><a href="get-involved.html#donate">Donate</a></li>
+          <li><a href="get-involved.html#partner">Partner With Us</a></li>
+          <li><a href="get-involved.html#volunteer">Volunteer</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <ul class="footer-social">
+          <li><a href="#">[Facebook]</a></li>
+          <li><a href="#">[Instagram]</a></li>
+          <li><a href="#">[LinkedIn]</a></li>
+          <li><a href="#">[X / Twitter]</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; <span id="year"></span> External Excellencies Global Foundation. All rights reserved.</p>
+    <ul>
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Safeguarding</a></li>
+      <li><a href="#">Accessibility</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script src="get-involved.js"></script>
+</body>
+</html>

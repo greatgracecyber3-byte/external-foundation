@@ -1,0 +1,28 @@
+backend:
+  name: github
+  repo: YOUR-GITHUB-USERNAME/YOUR-REPO-NAME   # <-- change this to your actual repo, e.g. jane/eegf-website
+  branch: main
+  base_url: https://api.netlify.com          # handles login — see setup notes below
+  auth_endpoint: auth
+
+# Where uploaded image FILES are stored in the repo
+media_folder: "images/gallery"
+# Where those images are served from on the live site
+public_folder: "/images/gallery"
+
+collections:
+  - name: "gallery"
+    label: "Homepage Slider"
+    files:
+      - file: "content/gallery.json"
+        label: "Homepage Slider Photos"
+        name: "gallery"
+        format: json
+        fields:
+          - label: "Slides"
+            name: "slides"
+            widget: list
+            summary: "{{fields.caption}}"
+            fields:
+              - { label: "Photo", name: "image", widget: image }
+              - { label: "Caption", name: "caption", widget: string, required: false }
