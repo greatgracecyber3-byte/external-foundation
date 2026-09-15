@@ -127,6 +127,11 @@ button { font-family: inherit; cursor: pointer; }
   font-size: 0.9rem;
 }
 .btn-donate:hover { background: var(--clay-deep); }
+.btn-gold {
+  background: var(--gold);
+  color: var(--forest-deep);
+}
+.btn-gold:hover { background: #b8965a; }
 
 /* ============ PLACEHOLDER MEDIA ============ */
 .ph-photo {
@@ -262,6 +267,39 @@ img.ph-photo {
 .dropdown-menu a:hover { background: var(--ivory-soft); color: var(--forest-deep); }
 
 .header-actions { display: flex; align-items: center; gap: 14px; }
+
+/* ============ IN-PAGE JUMP NAV ============
+   Shared by any page with a "jump to section" bar (Our Work, Get Involved,
+   Stories & News) — defined once here so it can't silently go unstyled on
+   a page that forgets to load a page-specific stylesheet. */
+.program-jump {
+  position: sticky;
+  top: 65px;
+  z-index: 40;
+  background: var(--ivory-soft);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 14px var(--gutter);
+  overflow-x: auto;
+}
+.program-jump ul { max-width: var(--max); margin: 0 auto; display: flex; gap: 22px; white-space: nowrap; }
+.program-jump a { text-decoration: none; font-size: 0.85rem; font-weight: 600; color: var(--sand); }
+.program-jump a:hover { color: var(--forest-deep); }
+
+/* ============ DARK BAND ============
+   A recurring full-bleed forest-green anchor block, dropped into every
+   page so green reads as a real, present color site-wide — not just a
+   header stripe and a few thin accents. */
+.dark-band {
+  background: var(--forest-deep);
+  color: var(--ivory);
+  text-align: center;
+}
+.dark-band-inner { max-width: 720px; margin: 0 auto; }
+.dark-band .section-eyebrow { color: var(--gold); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.04em; margin-bottom: 14px; }
+.dark-band h2 { color: var(--ivory); font-size: clamp(1.6rem, 3.4vw, 2.3rem); max-width: 26ch; margin-left: auto; margin-right: auto; }
+.dark-band p { color: rgba(250, 248, 243, 0.78); font-size: 1.02rem; margin: 14px auto 0; max-width: 52ch; }
+.dark-band .btn { margin-top: 26px; }
 
 .nav-toggle {
   display: none;
@@ -409,7 +447,7 @@ img.ph-photo {
 }
 
 /* ============ SECTION SCAFFOLDING ============ */
-section { padding: clamp(44px, 6vw, 76px) var(--gutter); }
+section { padding: clamp(32px, 4.5vw, 60px) var(--gutter); }
 .section-head { max-width: var(--max); margin: 0 auto 48px; }
 .section-head h2 { font-size: clamp(1.8rem, 3.4vw, 2.6rem); max-width: 20ch; }
 .section-eyebrow {
@@ -526,6 +564,7 @@ section { padding: clamp(44px, 6vw, 76px) var(--gutter); }
   gap: 28px;
 }
 .pillar { border-top: 3px solid var(--forest); padding-top: 20px; }
+.pillar:nth-child(even) { border-top-color: var(--gold); }
 .pillar h3 { font-size: 1.4rem; }
 .pillar p { color: #4a4a44; }
 

@@ -1,5 +1,6 @@
 /* ===== STORIES & NEWS PAGE ===== */
 
+.stories-intro { padding-bottom: 20px; }
 .stories-intro-inner { max-width: 820px; margin: 0 auto; }
 .stories-intro h1 { font-size: clamp(2rem, 4.2vw, 3rem); max-width: 22ch; }
 

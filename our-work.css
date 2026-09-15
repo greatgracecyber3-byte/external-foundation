@@ -4,20 +4,6 @@
 .work-intro-inner { max-width: 820px; margin: 0 auto; }
 .work-intro h1 { font-size: clamp(2rem, 4.2vw, 3rem); max-width: 20ch; }
 
-.program-jump {
-  position: sticky;
-  top: 65px;
-  z-index: 40;
-  background: var(--ivory-soft);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  padding: 14px var(--gutter);
-  overflow-x: auto;
-}
-.program-jump ul { max-width: var(--max); margin: 0 auto; display: flex; gap: 22px; white-space: nowrap; }
-.program-jump a { text-decoration: none; font-size: 0.85rem; font-weight: 600; color: var(--sand); }
-.program-jump a:hover { color: var(--forest-deep); }
-
 .program { border-bottom: 1px solid var(--line); }
 .program--alt { background: var(--ivory-soft); }
 .program-inner {
