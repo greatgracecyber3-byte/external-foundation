@@ -314,7 +314,9 @@ img.ph-photo {
 /* ============ HERO ============ */
 .hero {
   position: relative;
-  background: linear-gradient(180deg, var(--ivory) 0%, var(--ivory-soft) 100%);
+  background:
+    radial-gradient(900px 480px at 88% 8%, rgba(201,167,104,0.16), transparent 62%),
+    linear-gradient(180deg, var(--ivory) 0%, var(--ivory-soft) 100%);
   overflow: hidden;
 }
 .hero-inner {
@@ -326,26 +328,42 @@ img.ph-photo {
   gap: clamp(32px, 5vw, 64px);
   align-items: center;
 }
+.hero-copy { min-width: 0; }
 .hero-kicker {
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--sand);
   letter-spacing: 0.02em;
   margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-kicker::before {
+  content: "";
+  width: 26px;
+  height: 2px;
+  background: var(--gold);
+  flex: none;
 }
 .hero-copy h1 {
-  font-size: clamp(2.4rem, 5.2vw, 4rem);
-  max-width: 12ch;
+  font-size: clamp(2.2rem, 4.6vw, 3.7rem);
+  line-height: 1.08;
+  max-width: 16ch;
+  text-wrap: balance;
 }
 .hero-lede {
-  font-size: 1.15rem;
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
   color: #3c3c38;
   max-width: 46ch;
   margin-top: 20px;
 }
 .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 32px; }
 
-.hero-visual { position: relative; }
+/* z-index:0 makes .hero-visual its own stacking context, so the decorative
+   frame and accent (z-index:-1) sit behind the photo but IN FRONT of the
+   hero background instead of disappearing underneath it. */
+.hero-visual { position: relative; z-index: 0; min-width: 0; }
 .hero-visual::before {
   content: "";
   position: absolute;
@@ -375,22 +393,61 @@ img.ph-photo {
 }
 
 /* ============ HERO CAROUSEL ============ */
-.hero-carousel { position: relative; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 20px 44px rgba(13, 33, 27, 0.16); border-radius: 2px; }
-.hero-carousel-track { position: relative; }
-.hero-slide { display: none; }
-.hero-slide.is-active { display: block; }
-.hero-slide .visual-block.ph-photo { border: none; box-shadow: none; margin: 0; }
-.hero-slide-caption {
+.hero-carousel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: 0 20px 44px rgba(13, 33, 27, 0.16);
+  border-radius: 2px;
+  background: var(--ivory-soft);
+}
+.hero-carousel-track { position: relative; display: grid; }
+/* All slides stack in one grid cell, so the carousel height is stable and
+   the caption/dots can never be pushed onto the text beside them. */
+.hero-slide {
+  grid-area: 1 / 1;
+  position: relative;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease;
+}
+.hero-slide.is-active { opacity: 1; visibility: visible; }
+.hero-slide .visual-block.ph-photo,
+.hero-slide img.ph-photo,
+.hero-slide .has-photo > img {
+  border: none;
+  box-shadow: none;
   margin: 0;
-  padding: 10px 16px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+.hero-slide img.ph-photo,
+.hero-slide .has-photo > img { display: block; }
+/* Caption is an overlay INSIDE the photo with a scrim, and reserves room on
+   the right for the dots — the two can no longer overlap each other or the
+   copy column. */
+.hero-slide-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 44px 104px 14px 18px;
   font-size: 0.82rem;
+  line-height: 1.4;
   color: var(--ivory);
-  background: var(--forest-deep);
+  background: linear-gradient(180deg, rgba(13,33,27,0) 0%, rgba(13,33,27,0.55) 42%, rgba(13,33,27,0.88) 100%);
   letter-spacing: 0.01em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .hero-carousel-nav {
   position: absolute;
-  top: 42%;
+  top: 50%;
   transform: translateY(-50%);
   width: 38px;
   height: 38px;
@@ -404,11 +461,22 @@ img.ph-photo {
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 12px rgba(13,33,27,0.2);
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 .hero-carousel-nav:hover { background: var(--ivory); }
 .hero-carousel-nav.prev { left: 12px; }
 .hero-carousel-nav.next { right: 12px; }
-.hero-carousel-dots { position: absolute; bottom: 44px; left: 0; right: 0; display: flex; justify-content: center; gap: 7px; }
+.hero-carousel-nav.prev:hover { transform: translateY(-50%) translateX(-2px); }
+.hero-carousel-nav.next:hover { transform: translateY(-50%) translateX(2px); }
+.hero-carousel-dots {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  left: auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 7px;
+}
 .hero-carousel-dots button {
   width: 7px;
   height: 7px;
@@ -416,19 +484,19 @@ img.ph-photo {
   border: none;
   background: rgba(250, 248, 243, 0.55);
   padding: 0;
+  transition: width 0.25s ease, background 0.25s ease;
 }
 .hero-carousel-dots button.is-active { background: var(--ivory); width: 18px; border-radius: 4px; }
 
 .scroll-cue {
   display: block;
-  margin: 0 auto;
+  margin: 0 auto 28px;
   width: 26px;
   height: 42px;
   border: 2px solid var(--sand);
   border-radius: 20px;
   position: relative;
   background: none;
-  margin-bottom: 28px;
 }
 .scroll-cue span {
   position: absolute;
@@ -713,6 +781,7 @@ section { padding: clamp(32px, 4.5vw, 60px) var(--gutter); }
 .footer-col ul { display: flex; flex-direction: column; gap: 10px; }
 .footer-col a { text-decoration: none; font-size: 0.92rem; color: rgba(246,242,233,0.8); }
 .footer-col a:hover { color: var(--ivory); }
+.social-soon { font-size: 0.92rem; color: rgba(246,242,233,0.4); cursor: default; }
 
 .footer-bottom {
   max-width: var(--max);
@@ -789,3 +858,268 @@ section { padding: clamp(32px, 4.5vw, 60px) var(--gutter); }
   .footer-cols { grid-template-columns: 1fr 1fr; }
   .impact-grid { grid-template-columns: 1fr 1fr; }
 }
+
+/* ============================================================
+   REFINEMENTS — Sept 2026 pass
+   Fixes: nav overlap at tablet widths, hero stacking on mobile,
+   plus restrained visual polish (depth, focus, placeholders).
+   ============================================================ */
+
+/* --- Tablet nav ---------------------------------------------------------
+   The old build only switched to the hamburger at 640px, so between roughly
+   700px and 980px seven nav items + the Donate button ran into the logo.
+   The menu panel now takes over at 1024px, where the row actually runs out. */
+@media (max-width: 1024px) {
+  .main-nav {
+    position: fixed;
+    inset: 0 0 0 auto;
+    width: min(80vw, 340px);
+    background: var(--ivory);
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+    padding: 90px 28px 28px;
+    box-shadow: -8px 0 24px rgba(0,0,0,0.08);
+    overflow-y: auto;
+    z-index: 120;
+  }
+  .main-nav.is-open { transform: translateX(0); }
+  .main-nav ul { flex-direction: column; gap: 4px; }
+  .main-nav li { border-bottom: 1px solid var(--line); }
+  .main-nav > ul > li:last-child { border-bottom: none; }
+  .main-nav a { display: block; padding: 14px 2px; border-bottom: none !important; }
+  .nav-toggle { display: flex; }
+
+  .main-nav li.has-dropdown { flex-wrap: wrap; }
+  .main-nav li.has-dropdown > a { flex: 1; }
+  .dropdown-toggle { width: 44px; height: 44px; }
+  .dropdown-menu {
+    position: static;
+    width: 100%;
+    max-height: 0;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    overflow: hidden;
+    transition: max-height 0.22s ease, padding 0.22s ease;
+  }
+  .has-dropdown.is-open .dropdown-menu { max-height: 420px; padding: 0 0 10px 14px; }
+  .dropdown-menu a { padding: 11px 12px; font-size: 0.9rem; }
+}
+
+/* Dim the page behind the open menu panel so the two never read as one layer */
+.nav-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 33, 27, 0.42);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 110;
+}
+body.nav-open .nav-scrim { opacity: 1; pointer-events: auto; }
+body.nav-open { overflow: hidden; }
+
+/* --- Hero on small screens ---------------------------------------------
+   Centre the photo when it stacks above the copy, and drop the decorative
+   accent that used to poke out under the headline. */
+@media (max-width: 980px) {
+  /* width:100% matters — with only `margin-inline:auto` the grid item stops
+     stretching and collapses to the width of its placeholder text. */
+  .hero-visual { width: 100%; max-width: 420px; margin-inline: auto; }
+  .hero-copy { text-align: left; }
+  .hero-copy h1 { max-width: 20ch; }
+}
+@media (max-width: 640px) {
+  .hero-visual::before,
+  .visual-accent { display: none; }
+  .hero-slide-caption { padding: 40px 92px 12px 14px; font-size: 0.76rem; }
+  .hero-carousel-nav { width: 34px; height: 34px; }
+  .scroll-cue { display: none; }
+}
+
+/* --- Placeholders ------------------------------------------------------
+   Until real photography lands, an empty slot should look like a considered
+   part of the design rather than a broken image. */
+.ph-photo {
+  position: relative;
+  border: 1px solid var(--forest-tint-line);
+  background:
+    repeating-linear-gradient(135deg, rgba(22,48,42,0.05) 0 1px, transparent 1px 13px),
+    linear-gradient(160deg, #E7DFCC 0%, #D6CCB2 100%);
+}
+.ph-label {
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: #6f5d47;
+  max-width: 24ch;
+}
+
+/* --- Depth and interaction --------------------------------------------- */
+.focus-card,
+.involved-card,
+.story-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.focus-card:hover,
+.involved-card:hover,
+.story-card:hover {
+  transform: translateY(-3px);
+}
+.btn { transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+
+/* Keyboard focus that is visible on both the ivory and forest backgrounds */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* --- Long-word safety --------------------------------------------------
+   Stops long project titles and URLs from pushing a card wider than its
+   column, which is the other way text ends up sitting on top of an image. */
+h1, h2, h3, h4, p, li, summary, td, th { overflow-wrap: break-word; }
+
+@media (prefers-reduced-motion: reduce) {
+  .focus-card:hover,
+  .involved-card:hover,
+  .story-card:hover { transform: none; }
+  .hero-slide { transition: none; }
+}
+
+/* --- Uploaded photos (filled from the /admin dashboard) ----------------- */
+.has-photo { overflow: hidden; border: none; display: block; }
+.has-photo > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.slot-caption {
+  font-size: 0.78rem;
+  color: var(--sand);
+  margin-top: 8px;
+  line-height: 1.5;
+  max-width: 48ch;
+}
+
+/* The closed menu panel sits off the right edge, which on very narrow phones
+   added a sideways scrollbar to the whole page. `clip` removes that without
+   turning <html> into a scroll container, so the sticky header still works.
+   visibility also keeps the closed menu's links out of the tab order. */
+html { overflow-x: clip; }
+@media (max-width: 1024px) {
+  .main-nav { visibility: hidden; transition: transform 0.25s ease, visibility 0s linear 0.25s; }
+  .main-nav.is-open { visibility: visible; transition: transform 0.25s ease, visibility 0s; }
+}
+
+/* ============================================================
+   REMOVED PHOTO FRAMES — how the page closes the gap
+   ------------------------------------------------------------
+   When a frame is deleted (because no photo was uploaded for it),
+   site-images.js adds .media-removed to the band around it. These
+   rules turn a two-column band back into one readable column
+   instead of leaving half the row empty.
+   ============================================================ */
+
+/* Two-column bands: text takes the full width, and gets a comfortable
+   measure rather than stretching to a 1200px line. */
+.health-inner.media-removed,
+.founder-inner.media-removed,
+.founder-full-inner.media-removed,
+.program-inner.media-removed {
+  grid-template-columns: 1fr;
+}
+.health-inner.media-removed > *,
+.founder-inner.media-removed > *,
+.founder-full-inner.media-removed > *,
+.program-inner.media-removed > * {
+  max-width: 68ch;
+}
+
+/* Cards that were photo-on-top: the heading now leads, so it needs the
+   breathing room the photo used to provide. */
+.focus-card.media-removed,
+.story-card.media-removed,
+.impact-story-card.media-removed,
+.latest-card.media-removed {
+  padding-top: 4px;
+}
+.focus-card.media-removed { border-top: 2px solid var(--gold); padding-top: 18px; }
+.story-card.media-removed h3,
+.impact-story-card.media-removed h3,
+.latest-card.media-removed h3 { margin-top: 0; }
+
+/* Project photo groups size themselves to however many photos there are,
+   so one photo reads as a deliberate single image and two read as a pair,
+   instead of a three-across grid with holes in it. */
+.project-gallery[data-count="1"] { grid-template-columns: minmax(0, 60%); }
+.project-gallery[data-count="2"] { grid-template-columns: repeat(2, 1fr); }
+.project-gallery[data-count="4"] { grid-template-columns: repeat(2, 1fr); }
+.project-gallery[data-count="5"],
+.project-gallery[data-count="6"] { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 640px) {
+  .project-gallery[data-count] { grid-template-columns: 1fr 1fr; }
+  .project-gallery[data-count="1"] { grid-template-columns: 1fr; }
+}
+
+/* Uploaded photos fill their frame whatever shape it was cut to. */
+.has-photo { overflow: hidden; border: none; }
+.slot-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* Frames are hidden until the loader has decided their fate, so a removed
+   frame never flashes on screen before it disappears. The slider is exempt
+   — it always has frames. */
+html:not(.photos-ready) .ph-photo:not(.hero-carousel .ph-photo) { visibility: hidden; }
+
+/* A photo and its caption are one block, so a caption can never land in the
+   next grid cell and push a two-column row out of alignment. */
+.slot-figure { margin: 0; min-width: 0; display: block; }
+.slot-figure > .slot-caption { margin-top: 8px; }
+
+/* Admin link in the footer — small and out of the way on purpose */
+.footer-admin-link {
+  opacity: 0.55;
+  font-size: 0.85em;
+}
+.footer-admin-link:hover { opacity: 1; }
+
+/* ============ FEATURED UPCOMING PROGRAMME (homepage) ============ */
+.featured-programme { background: var(--forest-deep); padding: clamp(40px, 6vw, 72px) var(--gutter); }
+.featured-programme-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+}
+.featured-programme-media { aspect-ratio: 4/5; border-radius: var(--radius); border-color: var(--line-on-dark); }
+.featured-programme-tag {
+  font-size: 0.8rem; font-weight: 600; color: var(--gold);
+  letter-spacing: 0.02em; margin-bottom: 14px;
+}
+.featured-programme-copy h2 { color: var(--ivory); font-size: clamp(1.6rem, 3vw, 2.2rem); max-width: 22ch; }
+.featured-programme-line { font-family: var(--font-display); font-style: italic; color: var(--clay-soft); font-size: 1.15rem; margin-top: 10px; }
+.featured-programme-facts {
+  margin: 22px 0; padding: 18px 0; border-top: 1px solid var(--line-on-dark);
+  border-bottom: 1px solid var(--line-on-dark); display: flex; flex-direction: column; gap: 8px;
+}
+.featured-programme-facts li { color: rgba(250,248,243,0.85); font-size: 0.94rem; list-style: none; }
+.featured-programme-facts strong { color: var(--ivory); }
+.featured-programme-copy > p:not([class]) { color: rgba(250,248,243,0.75); max-width: 52ch; margin-bottom: 26px; }
+
+@media (max-width: 980px) {
+  .featured-programme-inner { grid-template-columns: 1fr; }
+  .featured-programme-media { max-width: 380px; margin: 0 auto; }
+}
+
+/* Featured programme banner and Accelerator hero, with their graphic removed */
+.featured-programme-inner.media-removed,
+.prog-hero-inner.media-removed { grid-template-columns: 1fr; text-align: center; }
+.featured-programme-inner.media-removed .featured-programme-copy,
+.prog-hero-inner.media-removed .prog-hero-copy { max-width: 60ch; margin: 0 auto; }
+.featured-programme-inner.media-removed .featured-programme-facts,
+.prog-hero-inner.media-removed .prog-hero-facts { text-align: left; max-width: 40ch; margin-left: auto; margin-right: auto; }

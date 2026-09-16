@@ -9,18 +9,29 @@ document.addEventListener('DOMContentLoaded', function () {
   var toggle = document.getElementById('nav-toggle');
   var nav = document.getElementById('main-nav');
   if (toggle && nav) {
+    // Dim + lock the page behind the menu panel so the nav links never read
+    // as if they are sitting on top of the page content.
+    var scrim = document.createElement('div');
+    scrim.className = 'nav-scrim';
+    document.body.appendChild(scrim);
+
+    function setMenu(open) {
+      nav.classList.toggle('is-open', open);
+      document.body.classList.toggle('nav-open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (!open) closeAllDropdowns();
+    }
+
     toggle.addEventListener('click', function () {
-      var isOpen = nav.classList.toggle('is-open');
-      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-      if (!isOpen) closeAllDropdowns();
+      setMenu(!nav.classList.contains('is-open'));
+    });
+    scrim.addEventListener('click', function () { setMenu(false); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') setMenu(false);
     });
     // close menu when a plain nav link (not a dropdown toggle) is clicked
     nav.querySelectorAll('a').forEach(function (link) {
-      link.addEventListener('click', function () {
-        nav.classList.remove('is-open');
-        toggle.setAttribute('aria-expanded', 'false');
-        closeAllDropdowns();
-      });
+      link.addEventListener('click', function () { setMenu(false); });
     });
   }
 
@@ -93,8 +104,8 @@ document.addEventListener('DOMContentLoaded', function () {
       timer = setInterval(function () { goTo(current + 1); }, 5000);
     }
 
-    prevBtn.addEventListener('click', function () { goTo(current - 1); restart(); });
-    nextBtn.addEventListener('click', function () { goTo(current + 1); restart(); });
+    if (prevBtn) prevBtn.addEventListener('click', function () { goTo(current - 1); restart(); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { goTo(current + 1); restart(); });
     heroCarousel.addEventListener('mouseenter', function () { if (timer) clearInterval(timer); });
     heroCarousel.addEventListener('mouseleave', restart);
 

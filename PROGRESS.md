@@ -1,61 +1,123 @@
-# PROGRESS SO FAR
+# PROGRESS
 
-## Completed
+## What changed in this pass (verified against the site's own files, not just claimed)
 
-- **Stage 1 — Brand system + homepage:** `index.html`, `css/style.css`, `js/main.js`
-- **Stage 2 — About:** `about.html`, `css/about.css`, `js/about.js`
-- **Stage 3 — Our Work + Impact:** `our-work.html`, `impact.html`, `story-template.html`, `css/our-work.css`, `css/impact.css`, `css/story.css`, `js/impact.js`
-- **Stage 4 — Get Involved:** `get-involved.html`, `css/get-involved.css`, `js/get-involved.js`
-- **Stage 5 — Stories/News/Events/Reports + Contact + SEO + accessibility + performance:**
-  `stories.html`, `contact.html`, `css/stories.css`, `css/contact.css`,
-  `js/contact.js`, `robots.txt`, `sitemap.xml`
+- **impact.html rebuilt as a real project database**: 16 documented projects, each in an
+  expandable `<details>` card, filterable by 7 categories (Women's Empowerment, Education,
+  Health, Water, Youth, Humanitarian, Community Development). Every card shows When / Where /
+  Organization / Who benefited / Partners, an evidence tag (Verified — independent source,
+  Organization-reported, or Historical record — date being verified), and a real source link
+  where one exists.
+- **Real sources found and linked** (checked live, 16 Sept 2026):
+  - KEMRI — South B Community Medical Camp report
+  - KEMRI — South C cancer screening report
+  - Pulselive Kenya — seven-county Free Wellness Medical Camp
+  - BangBet newsroom — Kako Comprehensive School borehole & food donation
+  - SportsDesk.co.ke — Betika/BCLB borehole, Mituvu, Makueni
+  - drjanemwikali.com — Foundation history, Business Capital, Water Tank Donation, Borehole
+    Drilling Initiatives, CSR Across 32 Counties, Food Donations
+  All are labelled by independence level (organization's own site vs. independent media vs.
+  government/research-institute source) rather than presented as equally authoritative.
+- **Organizational attribution corrected in two places** where the master prompt's own
+  caution applied: the Kako widows/orphans event and the Mituvu borehole are sourced to
+  Dr. Jane Mwikali personally / her BCLB role, not automatically to External Excellencies
+  Global Foundation, because that is what the sources actually say.
+- **One claim from the master prompt could not be verified**: the specific "Makueni County
+  public-participation document naming Jane Makau as development partner" was not found.
+  The Mituvu borehole (Betika/BCLB, independently reported) is used instead, with this
+  substitution stated openly rather than hidden.
+- **Kako Special School (beds/mattresses/fees)** — no verifiable public post was found, so
+  it stays on the archive as "historical record — source being verified" with no invented
+  date, exactly as the master prompt requires.
+- **Timeline (2017 → 2026)** and **county explorer** (7 counties, only where a sourced
+  project exists) added.
+- **Sources & Further Reading** section added, grouped Level 1 (KEMRI/official) → Level 2
+  (independent media) → Level 3 (organization's own site).
+- **Auto-counters are real**: "Documented projects," "Counties reached" and "Project
+  categories" are computed in `impact.js` by counting the actual DOM elements on the page,
+  not hardcoded.
+- **All 60 `href="#"` placeholders fixed site-wide** (index, about, our-work, impact,
+  get-involved, stories, contact): footer legal links now point to four new real pages;
+  social placeholders became honest "(link coming soon)" text, except Facebook, which links
+  to the Foundation's real page.
+- **Four new legal pages built**: `privacy.html`, `terms.html`, `safeguarding.html`,
+  `accessibility.html`, styled with new `legal.css`, each explicitly marked as a draft
+  pending legal review (not published as if final).
+- **Validated**: HTML tag balance, CSS brace balance, and JS syntax all checked
+  programmatically after the rebuild — see this file's Sept 2026 entry.
 
-All five stages of the master build protocol are now built.
+## Sept 2026 — layout fixes + photo dashboard
 
-## Still open before this can go live
+- **Fixed the homepage text/slider collision.** Three causes: (1) the carousel
+  dots were pinned at a fixed `bottom: 44px`, so a two-line caption pushed text
+  under them; (2) slides used `display:none/block`, so the carousel resized as
+  captions changed length; (3) the decorative frame and accent had `z-index:-1`
+  without a stacking context on `.hero-visual`, so they painted *behind* the hero
+  background instead of behind the photo. Slides now stack in one CSS grid cell
+  (fixed height, crossfade), the caption is an overlay with a scrim that reserves
+  space for the dots, and `.hero-visual` gets `z-index: 0`.
+- **Fixed the tablet nav overlap.** The hamburger only appeared at 640px, so
+  between ~700px and 980px seven nav items plus the Donate button ran into the
+  logo. The menu panel now takes over at 1024px, with a scrim and a body scroll
+  lock behind it.
+- **Fixed a sideways scrollbar on narrow phones** caused by the closed off-canvas
+  menu (`overflow-x: clip` on `<html>`, plus `visibility` so closed menu links
+  stay out of the tab order).
+- **Verified**: no hero copy/visual overlap and no horizontal scroll at 320, 390,
+  768, 900, 1200 and 1440px; all pages load without JS errors.
 
-- **Every placeholder is still open.** `[ADD PHOTO]`, `[ADD VERIFIED ...]`,
-  and `[ADD PDF LINK]` blocks across all pages need real, verified content.
-  Nothing has been invented to fill them.
-- **No payment processor** is connected on Get Involved.
-- **No form backend** is connected on the volunteer form, contact form, or
-  newsletter sign-up — each needs a service like Formspree wired into its
-  `action="#"` before it can accept real submissions.
-- **`stories.html`** has one placeholder news card, one placeholder event,
-  and three placeholder reports — add, remove, or duplicate these rows as
-  real items are confirmed.
-- **`contact.html`** has placeholder address, phone, email, office hours,
-  and a placeholder map — add verified details before publishing, and add
-  a real map embed once the address is confirmed.
-- **`robots.txt` and `sitemap.xml`** reference a placeholder domain
-  (`YOUR-USERNAME.github.io/YOUR-REPO-NAME/`) — replace with the real
-  published URL once GitHub Pages is live.
-- **Social links** ([Facebook], [Instagram], [LinkedIn], [X/Twitter]) in
-  every footer are still placeholders.
-- **Legal pages** (Privacy Policy, Terms, Safeguarding, Accessibility)
-  linked in every footer don't exist yet as real pages — currently `#`.
-- No real photography has been added anywhere; see `images/README.md`
-  from Stage 1 for the running list of needed images.
+### Photo dashboard (upload without touching code)
 
-## Accessibility & performance notes (Stage 5 audit)
+- All 98 photo boxes across the site now carry a `data-slot` id.
+- `admin/config.yml` rebuilt with two sections: **Homepage slider** and
+  **Photos across the site** (95 named spots in a dropdown, plus alt text and
+  caption fields).
+- New `site-images.js` reads `content/images.json` and swaps placeholders for
+  real `<img>` tags at page load.
+- `admin/index.html` now shows connection instructions if the dashboard can't
+  load, instead of a blank page.
+- `DASHBOARD-SETUP.md` written for a non-technical user.
+- **Still required:** the `repo:` line in `admin/config.yml` must be pointed at a
+  real GitHub repository, and Netlify Identity + Git Gateway enabled, before
+  anyone can log in.
 
-- Every page has a skip link, a labelled primary nav, `aria-expanded` on
-  the mobile toggle, and `:focus-visible` styling from the brand system —
-  these patterns are consistent across all six pages plus the story
-  template.
-- Once real `<img>` tags replace the `.ph-photo` placeholders, add
-  meaningful `alt` text to each and `loading="lazy"` to any image below
-  the fold.
-- Google Fonts are loaded with `preconnect` on every page already, which
-  is the main font-loading performance lever available without a build step.
-- `robots.txt` and `sitemap.xml` are in place; each page has a `<title>`
-  and meta description — `contact.html` and `stories.html` now also have
-  `og:title`/`og:type` and a `rel="canonical"` tag, matching the pattern
-  worth back-filling onto the Stage 1–4 pages too.
+## Sept 2026 — photo slots cut from 98 to 17, and frames made removable
 
-## How to continue
+- **98 slots was too many.** Reduced to 17 named spots by (a) sharing one photo
+  across the places it appears — the seven programme photos now fill both the
+  Home focus grid and the matching Our Work section, and the founder portrait and
+  three story cards work the same way; and (b) replacing the 67 individual Impact
+  slots with 16 per-project photo *groups*.
+- **Project galleries are now variable-length.** Each Impact project takes a list
+  of 0..n photos. First photo becomes the lead image, the rest form a group sized
+  to its own count (1 → 60% width, 2 → pair, 4 → 2x2, 5-6 → 3 across), so there
+  are never holes in a three-across grid.
+- **Empty frames are removed, not left blank.** `site-images.js` deletes every
+  unfilled `.ph-photo` and tags the surrounding band with `.media-removed`; new
+  CSS collapses two-column bands (`.health-inner`, `.founder-inner`,
+  `.program-inner`, `.founder-full-inner`) to a single 68ch column, and gives
+  photo-led cards a top rule so the heading has something to sit against. The
+  homepage slider is exempt — it always keeps its frames.
+- **One dashboard switch** (`settings.showPlaceholders`) brings the labelled grey
+  boxes back while photographs are still being collected. Currently ON.
+- **Bug found and fixed during testing:** injected captions were being added as
+  plain siblings, which made them grid items in two-column bands and pushed the
+  text column down a row. Photo and caption are now wrapped in one `<figure>`.
+- **Frames are hidden until the loader decides**, so a removed frame never
+  flashes on screen first.
+- **Verified** on a local HTTP server (fetch does not work over file://) with a
+  partial-fill fixture: fills, removals, reflow, per-project galleries, no JS
+  errors, and no horizontal scroll on all 8 content pages at 390px and 1280px.
 
-This closes the five-stage protocol. Next real steps are content, not
-code: verified copy, real photos, a form backend, a payment processor,
-and the four legal pages, then a final read-through against
-`master-build-prompt.md`'s "never invent facts" rule before publishing.
+## Still open before this can go fully live
+
+- Real photography — 17 site spots, the slider, and 16 project groups are all
+  still empty. Nothing breaks if they stay empty (frames are removed), but the
+  site is currently all text.
+- No form backend connected (newsletter, contact, volunteer forms still `action="#"`).
+- No payment processor connected on Get Involved.
+- `robots.txt` / `sitemap.xml` still reference a placeholder domain.
+- Legal pages need review by an actual lawyer/safeguarding specialist before publishing —
+  they are honest first drafts, not final policy.
+- Kako Special School project and the four pre-2023 medical camps still need their
+  original sources located to move from "historical record" to "verified."
