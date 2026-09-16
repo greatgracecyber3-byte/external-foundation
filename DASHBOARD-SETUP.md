@@ -1,11 +1,13 @@
 # Photo dashboard — setup and daily use
 
-The site has a dashboard at **`/admin`**: a login screen, a file picker, an
+The site has a dashboard at **`admin.html`**: a login screen, a file picker, an
 upload button and a Publish button. You never need to touch code to change a
-photo.
+photo. It's one plain file — uploads to GitHub exactly like `about.html` or
+`contact.html` does, no folder involved.
 
-There are **17 photo spots** around the site, plus the homepage slider, plus one
-photo group per project on Our Impact. Every one of them is optional.
+There are **18 photo spots** around the site, plus the homepage slider, plus
+one photo group per project on Our Impact and one for the Accelerator 2026
+programme gallery. Every one of them is optional.
 
 ---
 
@@ -25,16 +27,23 @@ slider with no frames is not a slider.
 
 ## Part 1 — Connect it (once, about 20 minutes)
 
-1. **Put the site in a GitHub repository.** Create a free account at github.com,
-   make a new repository, upload this whole folder.
+1. **Put the site in a GitHub repository.** Create a free account at
+   github.com, make a new repository. Then open the unzipped site folder on
+   your computer, select everything inside it (Ctrl+A / Cmd+A — you should see
+   every individual file and folder highlighted, not one single folder icon),
+   and drag all of it into the repository at once.
 
-2. **Point the dashboard at it.** Open `admin/config.yml` and change:
+2. **Point the dashboard at your repository.** Open `admin.html` in a text
+   editor, search for this line near the bottom of the file:
 
    ```
-   repo: YOUR-GITHUB-USERNAME/YOUR-REPO-NAME
+   "repo": "YOUR-GITHUB-USERNAME/YOUR-REPO-NAME",
    ```
 
-   to your real one, e.g. `repo: janemakau/eegf-website`.
+   and change it to your real one, e.g. `"repo": "janemakau/eegf-website",`
+   — keep the quotes and the comma exactly as they are. Save the file, then
+   re-upload just this one file to GitHub: **Add file → Upload files → drag in
+   `admin.html` → Commit changes.**
 
 3. **Deploy on Netlify.** Sign in at netlify.com with GitHub → "Add new site" →
    "Import an existing project" → pick the repository.
@@ -46,19 +55,17 @@ slider with no frames is not a slider.
 5. **Invite yourself.** Under Identity click "Invite users", enter your email,
    accept the invitation, set a password.
 
-6. Go to `yoursite.com/admin` and log in.
+6. Go to `yoursite.com/admin.html`, enter the door password
+   (`KaribuKenya@23`, unless you've changed it), then log in with the account
+   from step 5.
 
 ### Seeing it before you do any of that
 
-In a terminal in this folder:
-
-```
-npx decap-server
-```
-
-Then uncomment `local_backend: true` in `admin/config.yml`, serve the folder
-(`python3 -m http.server`), and open `/admin`. No login, changes save straight
-to the files on your computer.
+Serve the folder locally (for example `python3 -m http.server` in the site
+folder) and open `admin.html` in a browser. The password screen works
+immediately. The editor behind it needs the repository connected (step 2)
+and, to actually log in and save, Netlify Identity (steps 3–5) — until those
+are done you'll see a "not connected yet" message, which is expected.
 
 ---
 
@@ -71,7 +78,7 @@ The rotating photos at the top of the home page.
 **Add Slide** → upload → caption → drag to reorder → **Publish**.
 Remove a slide by deleting its entry. Two slides is fine; so is eight.
 
-### Photos around the site — 17 spots
+### Photos around the site — 18 spots
 
 **Add Photo** → pick the spot from the dropdown → upload → **Publish**.
 
@@ -79,12 +86,14 @@ Seven of the spots are the **programme photos** (Women's Empowerment, Youth,
 Health, Education, Economic, Leadership, Community). Each of those appears in
 **two places at once** — the Home page grid and the matching Our Work section —
 so you upload once and it lands in both. The founder portrait and the three
-story cards work the same way.
+story cards work the same way. The **Accelerator 2026 official graphic** is
+shared between the homepage teaser banner and its section on the Our Work page.
 
 The full list:
 
 | Spot | Appears on |
 |---|---|
+| Accelerator 2026 — official programme graphic | Home + Our Work |
 | Programme — Women's Empowerment | Home + Our Work |
 | Programme — Youth Development | Home + Our Work |
 | Programme — Health | Home |
@@ -102,15 +111,18 @@ The full list:
 **To remove a photo**, delete its entry and Publish. The frame disappears and
 the page closes up.
 
-### Project photos (Our Impact)
+### Project photos (Our Impact + Accelerator 2026)
 
-**Add Project** → pick one of the 16 projects → add as many photos as you have.
+**Add Project** → pick one of the 16 Impact projects, or "Accelerator 2026 —
+programme gallery" → add as many photos as you have.
 
-- The **first** photo becomes the large one at the top of the project.
-- The rest form a group underneath, sized to however many there are: one photo
-  sits at 60% width, two sit side by side, four make a 2×2, five or six make a
-  3-across grid. No holes.
-- A project you never add shows **no photo area at all** — the text just runs.
+- For an Impact project, the **first** photo becomes the large one at the top;
+  the rest form a group underneath, sized to however many there are.
+- For the Accelerator gallery, every photo you add joins its 6-photo grid on
+  the Our Work page (orientation day, training, mentorship, KIRDI activities —
+  whatever you actually have).
+- A project or gallery you never add photos to shows **no photo area at all**
+  — the text just runs.
 
 ### The one switch: Display settings
 
@@ -118,12 +130,11 @@ At the top of "Photos around the site" there is a single toggle:
 
 > **Show labelled empty boxes while collecting photos**
 
-It is currently **on**, so you still see the grey `[ADD PHOTO — …]` boxes, which
-is useful while you are gathering pictures and want to know what to look for.
-
-**Turn it off** and every unfilled frame is removed from the live site and the
-layout closes up. Turn it off the moment you are happy the site can stand on the
-photos you have.
+It is currently **on**, so you still see the grey `[ADD PHOTO — …]` boxes,
+which is useful while you are gathering pictures and want to know what to look
+for. **Turn it off** once you're happy the site can stand on the photos you
+have — every unfilled frame is then removed from the live site and the layout
+closes up.
 
 ---
 
@@ -134,21 +145,24 @@ photos you have.
   crops to fit, so keep the subject near the middle.
 - **Weight:** aim under ~500 KB per file so pages load on mobile data.
   squoosh.app shrinks photos free in the browser.
-- **Alt text:** one sentence saying what is in the picture. This is what a blind
-  visitor hears and what Google reads. Worth the ten seconds.
-- **Consent:** for any recognisable person, especially a child, be sure you have
-  permission to publish before uploading. This matters more than the photo does.
+- **Alt text:** one sentence saying what is in the picture. This is what a
+  blind visitor hears and what Google reads. Worth the ten seconds.
+- **Consent:** for any recognisable person, especially a child, be sure you
+  have permission to publish before uploading. This matters more than the
+  photo does.
 
 ---
 
 ## How it works, briefly
 
-Each photo frame carries a `data-slot` label (`data-slot="programme-women"`), and
-each Impact project carries `data-project="p01"`. Publishing writes your choices
-to `content/images.json` and saves the files into `images/gallery/`. On page
+Each photo frame carries a `data-slot` label (`data-slot="programme-women"`),
+and each project or gallery carries `data-project="p01"` or
+`data-project="accelerator-2026"`. Publishing writes your choices to
+`content/images.json` and saves the files into `images/gallery/`. On page
 load, `site-images.js` fills the frames it has photos for, builds the project
-groups, then deletes every remaining empty frame and tags the section around it
-so the stylesheet can close the gap.
+groups, then deletes every remaining empty frame and tags the section around
+it so the stylesheet can close the gap.
 
-If you ever add a new photo frame to a page, give it a `data-slot` of its own and
-add a matching line to the options list in `admin/config.yml`.
+If you ever add a new photo frame to a page, give it a `data-slot` of its own
+and add a matching line to the `options` list inside `admin.html` (search for
+`DASHBOARD_CONFIG` near the bottom of the file).

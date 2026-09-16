@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Photo dashboard — External Excellencies Global Foundation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --forest:#16302A; --forest-deep:#0D211B; --ivory:#FAF8F3; --gold:#C9A768; --sand:#7A6650; --clay:#B5502F; }
+  body { margin:0; font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif; background:var(--ivory); color:#201F1B; }
+  .rule { height:2px; width:32px; background:var(--gold); margin-bottom:20px; }
+
+  #gate { max-width:400px; margin:0 auto; padding:80px 24px; }
+  #gate h1 { font-family:"Source Serif 4",Georgia,serif; font-size:1.6rem; color:var(--forest-deep); margin:0 0 6px; }
+  #gate p { color:var(--sand); font-size:0.92rem; line-height:1.6; margin:0 0 22px; }
+  #gate input {
+    width:100%; box-sizing:border-box; padding:13px 14px; font-size:1rem;
+    border:1px solid #d9d2c2; border-radius:4px; margin-bottom:12px; font-family:inherit;
+  }
+  #gate input:focus { outline:2px solid var(--gold); outline-offset:1px; }
+  #gate button {
+    width:100%; padding:13px 14px; font-size:0.95rem; font-weight:600;
+    background:var(--forest); color:var(--ivory); border:none; border-radius:4px; cursor:pointer;
+  }
+  #gate button:hover { background:var(--forest-deep); }
+  #gate .err { color:var(--clay); font-size:0.88rem; margin-top:10px; display:none; }
+  #gate .note { margin-top:28px; font-size:0.8rem; color:#9a8f79; line-height:1.6; }
+
+  #boot { max-width:620px; margin:0 auto; padding:64px 24px; display:none; }
+  #boot h1 { font-family:"Source Serif 4",Georgia,serif; font-size:1.7rem; color:var(--forest-deep); margin:0 0 6px; }
+  #boot .sub { color:var(--sand); font-size:0.95rem; margin:0 0 28px; }
+  #boot ol { padding-left:20px; line-height:1.7; font-size:0.95rem; }
+  #boot li { margin-bottom:8px; }
+  #boot code { background:#EFEADF; padding:2px 6px; border-radius:3px; font-size:0.85em; }
+  .spinner { display:inline-block; width:14px; height:14px; border:2px solid #d9d2c2; border-top-color:var(--forest); border-radius:50%; animation:spin .8s linear infinite; vertical-align:-2px; margin-right:8px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spinner { animation:none; } }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     ONE SINGLE FILE — admin.html
+     ------------------------------------------------------------
+     This page used to be a folder (admin/index.html + admin/config.yml).
+     It is now one plain file, sitting next to about.html, contact.html
+     and every other page, because a folder was tripping up GitHub's
+     web upload. The dashboard's whole configuration — which photo spots
+     exist, what the repo name is — is embedded directly below as a
+     block of settings, instead of living in a separate config.yml file.
+
+     TO CONNECT THIS TO YOUR REPOSITORY:
+     Find the line a little further down that says
+         "repo": "YOUR-GITHUB-USERNAME/YOUR-REPO-NAME"
+     and change it to your real one, e.g. "janemakau/eegf-website".
+     That is the only edit required.
+     ============================================================ -->
+
+<div id="gate">
+  <div class="rule"></div>
+  <h1>Photo dashboard</h1>
+  <p>Enter the password to continue.</p>
+  <input type="password" id="gate-input" placeholder="Password" autocomplete="off" />
+  <button id="gate-submit">Enter</button>
+  <p class="err" id="gate-err">That password isn't right. Try again.</p>
+  <p class="note">This screen only keeps out casual visitors — it isn't a real
+    login. The actual access control happens on the next screen, where you sign
+    in with the account set up for this site.</p>
+</div>
+
+<div id="boot">
+  <div class="rule"></div>
+  <h1>Loading the editor…</h1>
+  <p class="sub"><span class="spinner"></span>This can take a few seconds.</p>
+  <p class="sub">If this message stays on screen, the dashboard has not been connected to a repository yet. To connect it:</p>
+  <ol>
+    <li>Put this website in a GitHub repository.</li>
+    <li>Open <code>admin.html</code>, find <code>"repo": "YOUR-GITHUB-USERNAME/YOUR-REPO-NAME"</code> near the bottom, and change it to your real repository.</li>
+    <li>Deploy the site on Netlify and turn on <strong>Identity</strong> and <strong>Git Gateway</strong> in the Netlify site settings.</li>
+    <li>Invite yourself as a user under Identity, accept the email, then come back here and log in.</li>
+  </ol>
+  <p class="sub">Full walkthrough in <code>DASHBOARD-SETUP.md</code>.</p>
+</div>
+
+<script>
+  // Changing the door password: edit the string on the right, save, re-upload.
+  var GATE_PASSWORD = "KaribuKenya@23";
+
+  var gate  = document.getElementById('gate');
+  var boot  = document.getElementById('boot');
+  var input = document.getElementById('gate-input');
+  var err   = document.getElementById('gate-err');
+
+  function unlock() {
+    sessionStorage.setItem('eegf-admin-unlocked', '1');
+    gate.style.display = 'none';
+    boot.style.display = 'block';
+    loadCMS();
+  }
+
+  document.getElementById('gate-submit').addEventListener('click', check);
+  input.addEventListener('keydown', function (e) { if (e.key === 'Enter') check(); });
+  function check() {
+    if (input.value === GATE_PASSWORD) { unlock(); }
+    else { err.style.display = 'block'; input.value = ''; input.focus(); }
+  }
+
+  // Stop Decap CMS auto-initialising from a config.yml file (there isn't
+  // one) — the configuration is the JS object below instead.
+  window.CMS_MANUAL_INIT = true;
+
+  function loadCMS() {
+    var s = document.createElement('script');
+    s.src = 'https://unpkg.com/decap-cms@^3.7.0/dist/decap-cms.js';
+    s.onload = function () {
+      CMS.init({ config: DASHBOARD_CONFIG });
+      var tries = 0;
+      var check2 = setInterval(function () {
+        if (document.querySelector('#nc-root, [class*="AppMainContainer"]')) {
+          boot.remove();
+          clearInterval(check2);
+        }
+        if (++tries > 40) clearInterval(check2);
+      }, 300);
+    };
+    document.body.appendChild(s);
+  }
+
+  if (sessionStorage.getItem('eegf-admin-unlocked') === '1') unlock();
+  else input.focus();
+
+  // ============================================================
+  // DASHBOARD CONFIGURATION
+  // ------------------------------------------------------------
+  // Everything the CMS needs to know: where photos get saved, and
+  // the full list of photo spots and projects across the site.
+  // Change the "repo" line below to connect this to your repository.
+  // ============================================================
+  var DASHBOARD_CONFIG = {
+  "backend": {
+    "name": "github",
+    "repo": "YOUR-GITHUB-USERNAME/YOUR-REPO-NAME",
+    "branch": "main",
+    "base_url": "https://api.netlify.com",
+    "auth_endpoint": "auth"
+  },
+  "media_folder": "images/gallery",
+  "public_folder": "/images/gallery",
+  "publish_mode": "simple",
+  "logo_url": "",
+  "collections": [
+    {
+      "name": "slider",
+      "label": "Homepage slider",
+      "description": "The rotating photos at the top of the home page. Add, remove or drag to reorder.",
+      "files": [
+        {
+          "file": "content/gallery.json",
+          "label": "Homepage slider photos",
+          "name": "gallery",
+          "format": "json",
+          "fields": [
+            {
+              "label": "Slides",
+              "name": "slides",
+              "widget": "list",
+              "summary": "{{fields.caption}}",
+              "label_singular": "Slide",
+              "fields": [
+                {
+                  "label": "Photo",
+                  "name": "image",
+                  "widget": "image",
+                  "hint": "Portrait works best here. At least 1200px on the long edge."
+                },
+                {
+                  "label": "Caption shown on the photo",
+                  "name": "caption",
+                  "widget": "string",
+                  "required": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "photos",
+      "label": "Photos around the site",
+      "description": "Add a photo only where you have one. Any spot you leave out has its frame removed from the live site and the layout closes up around it \u2014 no empty boxes.",
+      "files": [
+        {
+          "file": "content/images.json",
+          "label": "Site photos",
+          "name": "photos",
+          "format": "json",
+          "fields": [
+            {
+              "label": "Display settings",
+              "name": "settings",
+              "widget": "object",
+              "collapsed": true,
+              "fields": [
+                {
+                  "label": "Show labelled empty boxes while collecting photos",
+                  "name": "showPlaceholders",
+                  "widget": "boolean",
+                  "default": false,
+                  "hint": "Off (recommended): empty frames are removed and the page closes the gap. On: the grey '[ADD PHOTO]' boxes show, which is useful while you are still gathering pictures."
+                }
+              ]
+            },
+            {
+              "label": "Photos",
+              "name": "photos",
+              "widget": "list",
+              "label_singular": "Photo",
+              "required": false,
+              "summary": "{{fields.slot}}",
+              "hint": "Delete an entry to take that photo off the site and close the gap.",
+              "fields": [
+                {
+                  "label": "Where does this photo go?",
+                  "name": "slot",
+                  "widget": "select",
+                  "options": [
+                    {
+                      "label": "Accelerator 2026 \u2014 official programme graphic (Home + programme page)",
+                      "value": "accelerator-hero"
+                    },
+                    {
+                      "label": "Programme \u2014 Women's Empowerment (Home + Our Work)",
+                      "value": "programme-women"
+                    },
+                    {
+                      "label": "Programme \u2014 Youth Development (Home + Our Work)",
+                      "value": "programme-youth"
+                    },
+                    {
+                      "label": "Programme \u2014 Health (Home)",
+                      "value": "programme-health"
+                    },
+                    {
+                      "label": "Programme \u2014 Education & Skills (Home + Our Work)",
+                      "value": "programme-education"
+                    },
+                    {
+                      "label": "Programme \u2014 Economic Empowerment (Home + Our Work)",
+                      "value": "programme-economic"
+                    },
+                    {
+                      "label": "Programme \u2014 Leadership (Home + Our Work)",
+                      "value": "programme-leadership"
+                    },
+                    {
+                      "label": "Programme \u2014 Community Development (Home + Our Work)",
+                      "value": "programme-community"
+                    },
+                    {
+                      "label": "Feature \u2014 Medical outreach band (Home + Our Work)",
+                      "value": "feature-health"
+                    },
+                    {
+                      "label": "Portrait \u2014 Rev. Dr. Jane Mwikali Makau (Home + About)",
+                      "value": "founder"
+                    },
+                    {
+                      "label": "Story card 1 (Home + Stories)",
+                      "value": "story-1"
+                    },
+                    {
+                      "label": "Story card 2 (Home + Stories)",
+                      "value": "story-2"
+                    },
+                    {
+                      "label": "Story card 3 (Home + Stories)",
+                      "value": "story-3"
+                    },
+                    {
+                      "label": "Latest news card 1 (Home)",
+                      "value": "news-1"
+                    },
+                    {
+                      "label": "Latest news card 2 (Home)",
+                      "value": "news-2"
+                    },
+                    {
+                      "label": "Latest news card 3 (Home)",
+                      "value": "news-3"
+                    },
+                    {
+                      "label": "Contact \u2014 map or office photo",
+                      "value": "contact-map"
+                    },
+                    {
+                      "label": "Story template \u2014 main photo",
+                      "value": "story-template"
+                    }
+                  ]
+                },
+                {
+                  "label": "Photo",
+                  "name": "image",
+                  "widget": "image"
+                },
+                {
+                  "label": "Description for screen readers",
+                  "name": "alt",
+                  "widget": "string",
+                  "required": false,
+                  "hint": "Say what is in the photo, e.g. 'Nurses register patients at the South B medical camp.'"
+                },
+                {
+                  "label": "Caption shown under the photo",
+                  "name": "caption",
+                  "widget": "string",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "label": "Project photos (Our Impact)",
+              "name": "projects",
+              "widget": "list",
+              "label_singular": "Project",
+              "required": false,
+              "summary": "{{fields.project}}",
+              "hint": "Pick a project, then add as many photos as you have \u2014 one, three, six, or none. The first photo becomes the large one; the rest form a group underneath. A project with no photos shows no photo area at all.",
+              "fields": [
+                {
+                  "label": "Which project?",
+                  "name": "project",
+                  "widget": "select",
+                  "options": [
+                    {
+                      "label": "Accelerator 2026 \u2014 programme gallery (Orientation, training, mentorship, KIRDI activities)",
+                      "value": "accelerator-2026"
+                    },
+                    {
+                      "label": "Women's Empowerment \u2014 Women's Entrepreneurship Seminars",
+                      "value": "p01"
+                    },
+                    {
+                      "label": "Women's Empowerment \u2014 Seed Capital for Women and Widows",
+                      "value": "p02"
+                    },
+                    {
+                      "label": "Youth Empowerment \u2014 Youth Media Training Workshops",
+                      "value": "p03"
+                    },
+                    {
+                      "label": "Health & Medical Outreach \u2014 Early Medical Camps",
+                      "value": "p04"
+                    },
+                    {
+                      "label": "Education & Student Support \u2014 Kako Special School \u2014 Beds, Mattresses and Student",
+                      "value": "p05"
+                    },
+                    {
+                      "label": "Water & Environment \u2014 Makueni Water Initiatives",
+                      "value": "p06"
+                    },
+                    {
+                      "label": "Water & Environment \u2014 Water Tank Donation in Makueni",
+                      "value": "p07"
+                    },
+                    {
+                      "label": "Water & Environment \u2014 Borehole Drilling Initiatives",
+                      "value": "p08"
+                    },
+                    {
+                      "label": "Community Development \u2014 CSR Projects Across 32 Counties",
+                      "value": "p09"
+                    },
+                    {
+                      "label": "Humanitarian Support \u2014 Food Donations",
+                      "value": "p10"
+                    },
+                    {
+                      "label": "Health & Medical Outreach \u2014 Community Medical Camp \u2014 South B",
+                      "value": "p11"
+                    },
+                    {
+                      "label": "Health & Medical Outreach \u2014 South C Cancer Awareness & Screening",
+                      "value": "p12"
+                    },
+                    {
+                      "label": "Health & Medical Outreach \u2014 Seven-County Free Wellness Medical Camp Initiative",
+                      "value": "p13"
+                    },
+                    {
+                      "label": "Humanitarian Support \u00b7 Water & Environment \u2014 Widows and Orphans Community Suppor",
+                      "value": "p14"
+                    },
+                    {
+                      "label": "Health & Medical Outreach \u2014 Foundation Medical Outreach \u2014 2023 Onward",
+                      "value": "p15"
+                    },
+                    {
+                      "label": "Women's Empowerment \u00b7 Community Development \u2014 External Excellencies Empowerment ",
+                      "value": "p16"
+                    }
+                  ]
+                },
+                {
+                  "label": "Photos",
+                  "name": "photos",
+                  "widget": "list",
+                  "label_singular": "Photo",
+                  "fields": [
+                    {
+                      "label": "Photo",
+                      "name": "image",
+                      "widget": "image"
+                    },
+                    {
+                      "label": "Description for screen readers",
+                      "name": "alt",
+                      "widget": "string",
+                      "required": false
+                    },
+                    {
+                      "label": "Caption",
+                      "name": "caption",
+                      "widget": "string",
+                      "required": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+</script>
+</body>
+</html>

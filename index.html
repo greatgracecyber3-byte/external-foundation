@@ -1,136 +1,509 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="robots" content="noindex, nofollow" />
-<title>Photo dashboard — External Excellencies Global Foundation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>External Excellencies Global Foundation | Empowering Women, Youth &amp; Communities</title>
+<meta name="description" content="External Excellencies Global Foundation creates pathways for women and youth to thrive through empowerment, education, health, skills and sustainable opportunities.">
+
+<!-- Open Graph -->
+<meta property="og:title" content="External Excellencies Global Foundation">
+<meta property="og:description" content="Empowering women and youth. Transforming communities.">
+<meta property="og:type" content="website">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root { --forest:#16302A; --forest-deep:#0D211B; --ivory:#FAF8F3; --gold:#C9A768; --sand:#7A6650; --clay:#B5502F; }
-  body { margin:0; font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif; background:var(--ivory); color:#201F1B; }
-  .rule { height:2px; width:32px; background:var(--gold); margin-bottom:20px; }
-
-  /* ---------- password gate ---------- */
-  #gate { max-width:400px; margin:0 auto; padding:80px 24px; }
-  #gate h1 { font-family:"Source Serif 4",Georgia,serif; font-size:1.6rem; color:var(--forest-deep); margin:0 0 6px; }
-  #gate p { color:var(--sand); font-size:0.92rem; line-height:1.6; margin:0 0 22px; }
-  #gate input {
-    width:100%; box-sizing:border-box; padding:13px 14px; font-size:1rem;
-    border:1px solid #d9d2c2; border-radius:4px; margin-bottom:12px; font-family:inherit;
-  }
-  #gate input:focus { outline:2px solid var(--gold); outline-offset:1px; }
-  #gate button {
-    width:100%; padding:13px 14px; font-size:0.95rem; font-weight:600;
-    background:var(--forest); color:var(--ivory); border:none; border-radius:4px; cursor:pointer;
-  }
-  #gate button:hover { background:var(--forest-deep); }
-  #gate .err { color:var(--clay); font-size:0.88rem; margin-top:10px; display:none; }
-  #gate .note { margin-top:28px; font-size:0.8rem; color:#9a8f79; line-height:1.6; }
-
-  /* ---------- loading state, shown after the gate ---------- */
-  #boot { max-width:620px; margin:0 auto; padding:64px 24px; display:none; }
-  #boot h1 { font-family:"Source Serif 4",Georgia,serif; font-size:1.7rem; color:var(--forest-deep); margin:0 0 6px; }
-  #boot .sub { color:var(--sand); font-size:0.95rem; margin:0 0 28px; }
-  #boot ol { padding-left:20px; line-height:1.7; font-size:0.95rem; }
-  #boot li { margin-bottom:8px; }
-  #boot code { background:#EFEADF; padding:2px 6px; border-radius:3px; font-size:0.85em; }
-  .spinner { display:inline-block; width:14px; height:14px; border:2px solid #d9d2c2; border-top-color:var(--forest); border-radius:50%; animation:spin .8s linear infinite; vertical-align:-2px; margin-right:8px; }
-  @keyframes spin { to { transform:rotate(360deg); } }
-  @media (prefers-reduced-motion: reduce) { .spinner { animation:none; } }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ============================================================
-     PASSWORD GATE
-     ------------------------------------------------------------
-     Read this before relying on it: this only keeps out someone
-     casually clicking the Admin link in the footer. The password
-     lives in this page's own code, so anyone who looks at the page
-     source (right-click → View Page Source) can read it. It is a
-     doorbell, not a lock.
+<a class="skip-link" href="#main">Skip to content</a>
 
-     The lock that actually matters is the GitHub / Netlify Identity
-     login the dashboard asks for underneath — that is what decides
-     who can actually publish a change to the site. Set that up per
-     DASHBOARD-SETUP.md; this gate is just a courtesy screen in front
-     of it so the CMS login page isn't the first thing a random
-     visitor sees.
-     ============================================================ -->
-<div id="gate">
-  <div class="rule"></div>
-  <h1>Photo dashboard</h1>
-  <p>Enter the password to continue.</p>
-  <input type="password" id="gate-input" placeholder="Password" autocomplete="off" />
-  <button id="gate-submit">Enter</button>
-  <p class="err" id="gate-err">That password isn't right. Try again.</p>
-  <p class="note">This screen only keeps out casual visitors — it isn't a real
-    login. The actual access control happens on the next screen, where you sign
-    in with the account set up for this site.</p>
-</div>
+<!-- ============ HEADER ============ -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">External Excellencies<span>Global Foundation</span></a>
 
-<!-- Shown only while the real dashboard loads, or if it can't load because
-     config.yml still has the placeholder repository name. -->
-<div id="boot">
-  <div class="rule"></div>
-  <h1>Loading the editor…</h1>
-  <p class="sub"><span class="spinner"></span>This can take a few seconds.</p>
-  <p class="sub">If this message stays on screen, the dashboard has not been connected to a repository yet. To connect it:</p>
-  <ol>
-    <li>Put this website in a GitHub repository.</li>
-    <li>Open <code>admin/config.yml</code> and replace <code>YOUR-GITHUB-USERNAME/YOUR-REPO-NAME</code> with the real repository.</li>
-    <li>Deploy the site on Netlify and turn on <strong>Identity</strong> and <strong>Git Gateway</strong> in the Netlify site settings.</li>
-    <li>Invite yourself as a user under Identity, accept the email, then come back here and log in.</li>
-  </ol>
-  <p class="sub">Full walkthrough in <code>DASHBOARD-SETUP.md</code>.</p>
-</div>
+    <nav class="main-nav" id="main-nav" aria-label="Primary">
+      <ul>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li class="has-dropdown">
+          <a href="about.html">About Us</a>
+          <button class="dropdown-toggle" aria-expanded="false" aria-label="Show About Us submenu"><span></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="about.html#story">Our Story</a></li>
+            <li><a href="about.html#values">Our Values</a></li>
+            <li><a href="about.html#founder">Meet the Founder</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="our-work.html">Our Work</a>
+          <button class="dropdown-toggle" aria-expanded="false" aria-label="Show Our Work submenu"><span></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="our-work.html#accelerator">Youth &amp; Women Accelerator 2026</a></li>
+            <li><a href="our-work.html#women">Women's Empowerment</a></li>
+            <li><a href="our-work.html#youth">Youth Development</a></li>
+            <li><a href="our-work.html#health">Health</a></li>
+            <li><a href="our-work.html#education">Education</a></li>
+            <li><a href="our-work.html#economic">Economic Empowerment</a></li>
+            <li><a href="our-work.html#leadership">Leadership</a></li>
+            <li><a href="our-work.html#community">Community</a></li>
+          </ul>
+        </li>
+        <li><a href="impact.html">Our Impact</a></li>
+        <li class="has-dropdown">
+          <a href="get-involved.html">Get Involved</a>
+          <button class="dropdown-toggle" aria-expanded="false" aria-label="Show Get Involved submenu"><span></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="get-involved.html#donate">Donate</a></li>
+            <li><a href="get-involved.html#partner">Partner</a></li>
+            <li><a href="get-involved.html#volunteer">Volunteer</a></li>
+            <li><a href="get-involved.html#support-program">Support a Program</a></li>
+            <li><a href="get-involved.html#advocate">Advocate</a></li>
+          </ul>
+        </li>
+        <li><a href="stories.html">Stories &amp; News</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
 
-<script>
-  // Changing the password: edit the string on the right below, save, and
-  // re-publish this file. It is plain text here on purpose — see the note
-  // above about what this gate can and can't do.
-  var GATE_PASSWORD = "KaribuKenya@23";
+    <div class="header-actions">
+      <a href="get-involved.html#donate" class="btn btn-donate">Donate</a>
+      <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
 
-  var gate  = document.getElementById('gate');
-  var boot  = document.getElementById('boot');
-  var input = document.getElementById('gate-input');
-  var err   = document.getElementById('gate-err');
+<main id="main">
 
-  function unlock() {
-    // Held for this browser tab only — closing the tab locks it again.
-    sessionStorage.setItem('eegf-admin-unlocked', '1');
-    gate.style.display = 'none';
-    boot.style.display = 'block';
-    loadCMS();
-  }
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="hero-kicker">External Excellencies Global Foundation</p>
+        <h1>Empowering people.<br>Transforming communities.</h1>
+        <p class="hero-lede">We create pathways for women and youth to thrive through empowerment, education, health, skills and sustainable opportunities.</p>
+        <div class="hero-actions">
+          <a href="impact.html" class="btn btn-primary">Our Impact</a>
+          <a href="get-involved.html" class="btn btn-outline">Get Involved</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-carousel" id="hero-carousel" aria-roledescription="carousel" aria-label="Photos from our work">
+          <div class="hero-carousel-track" id="hero-carousel-track">
+            <div class="hero-slide is-active">
+              <div class="visual-block ph-photo" data-slot="slider-1">
+                <span class="ph-label">[ADD PHOTO — women entrepreneurs, community setting]</span>
+              </div>
+              <p class="hero-slide-caption">Women entrepreneurs, community setting</p>
+            </div>
+            <div class="hero-slide">
+              <div class="visual-block ph-photo" data-slot="slider-2">
+                <span class="ph-label">[ADD PHOTO — youth skills training]</span>
+              </div>
+              <p class="hero-slide-caption">Youth skills training</p>
+            </div>
+            <div class="hero-slide">
+              <div class="visual-block ph-photo" data-slot="slider-3">
+                <span class="ph-label">[ADD PHOTO — health outreach]</span>
+              </div>
+              <p class="hero-slide-caption">Community health outreach</p>
+            </div>
+          </div>
+          <button class="hero-carousel-nav prev" id="hero-prev" aria-label="Previous photo">&#8249;</button>
+          <button class="hero-carousel-nav next" id="hero-next" aria-label="Next photo">&#8250;</button>
+          <div class="hero-carousel-dots" id="hero-dots"></div>
+        </div>
+        <div class="visual-accent" aria-hidden="true"></div>
+      </div>
+    </div>
+    <button class="scroll-cue" id="scroll-cue" aria-label="Scroll to next section">
+      <span></span>
+    </button>
+  </section>
 
-  document.getElementById('gate-submit').addEventListener('click', check);
-  input.addEventListener('keydown', function (e) { if (e.key === 'Enter') check(); });
-  function check() {
-    if (input.value === GATE_PASSWORD) { unlock(); }
-    else { err.style.display = 'block'; input.value = ''; input.focus(); }
-  }
+  <!-- ============ FEATURED UPCOMING PROGRAMME ============ -->
+  <section class="featured-programme">
+    <div class="featured-programme-inner">
+      <div class="featured-programme-media ph-photo" data-slot="accelerator-hero"><span class="ph-label">[ADD OFFICIAL PROGRAMME GRAPHIC — Youth &amp; Women Enterprise Accelerator &amp; Incubator Programme 2026]</span></div>
+      <div class="featured-programme-copy">
+        <p class="featured-programme-tag">Upcoming programme &middot; fully sponsored</p>
+        <h2>Youth &amp; Women Enterprise Accelerator &amp; Incubator Programme 2026</h2>
+        <p class="featured-programme-line">"From Local Potential to Global Opportunity"</p>
+        <ul class="featured-programme-facts">
+          <li><strong>21–25 October 2026</strong> &middot; 5 days, in person</li>
+          <li>Kingdom Envoys International Ministries</li>
+          <li>External Excellencies Global Foundation, in partnership with KIRDI</li>
+        </ul>
+        <p>A five-day enterprise-development programme supporting women and youth entrepreneurs to build, strengthen, grow and scale their businesses — covering incubation, acceleration, value addition, market readiness, mentorship and business linkages.</p>
+        <a href="our-work.html#accelerator" class="btn btn-primary">Explore the programme</a>
+      </div>
+    </div>
+  </section>
 
-  function loadCMS() {
-    var s = document.createElement('script');
-    s.src = 'https://unpkg.com/decap-cms@^3.7.0/dist/decap-cms.js';
-    document.body.appendChild(s);
+  <!-- ============ BELIEF STATEMENT ============ -->
+  <section class="belief wave-top">
+    <div class="belief-inner">
+      <p class="belief-eyebrow">Why we exist</p>
+      <h2>Talent is everywhere. Opportunity is not.</h2>
+      <p class="belief-body">Across the communities we work in, we meet people with the ambition, discipline and ideas to change their circumstances — but without consistent access to capital, training, healthcare or a network that opens doors. External Excellencies Global Foundation exists to close that gap: not through one-time handouts, but through pathways that women, youth and communities can build a future on.</p>
+    </div>
+  </section>
 
-    var tries = 0;
-    var check2 = setInterval(function () {
-      if (document.querySelector('#nc-root, [class*="AppMainContainer"]')) {
-        boot.remove();
-        clearInterval(check2);
-      }
-      if (++tries > 40) clearInterval(check2);
-    }, 300);
-  }
+  <!-- ============ OUR FOCUS ============ -->
+  <section class="focus" id="focus">
+    <div class="section-head">
+      <p class="section-eyebrow">Our focus</p>
+      <h2>Seven ways we build pathways</h2>
+    </div>
 
-  if (sessionStorage.getItem('eegf-admin-unlocked') === '1') unlock();
-  else input.focus();
-</script>
+    <div class="focus-grid">
+      <article class="focus-card focus-card--lg">
+        <div class="focus-media ph-photo" data-slot="programme-women"><span class="ph-label">[ADD PHOTO]</span></div>
+        <h3>Women Empowerment</h3>
+        <p>Entrepreneurship, mentorship and seed-capital support that helps women build lasting economic independence.</p>
+        <a href="our-work.html#women" class="focus-link">Support women <span>&rsaquo;</span></a>
+      </article>
+
+      <article class="focus-card">
+        <div class="focus-media ph-photo" data-slot="programme-youth"><span class="ph-label">[ADD PHOTO]</span></div>
+        <h3>Youth Development</h3>
+        <p>Skills, digital literacy, media training and mentorship for young people building their futures.</p>
+        <a href="our-work.html#youth" class="focus-link">Empower youth <span>&rsaquo;</span></a>
+      </article>
+
+      <article class="focus-card">
+        <div class="focus-media ph-photo" data-slot="programme-health"><span class="ph-label">[ADD PHOTO]</span></div>
+        <h3>Health &amp; Wellness</h3>
+        <p>Community medical camps, screening and health education delivered alongside trusted institutions.</p>
+        <a href="our-work.html#health" class="focus-link">Explore our programs <span>&rsaquo;</span></a>
+      </article>
+
+      <article class="focus-card">
+        <div class="focus-media ph-photo" data-slot="programme-education"><span class="ph-label">[ADD PHOTO]</span></div>
+        <h3>Education &amp; Skills</h3>
+        <p>Practical training that turns ability into qualification, and qualification into opportunity.</p>
+        <a href="our-work.html#education" class="focus-link">Explore our programs <span>&rsaquo;</span></a>
+      </article>
+
+      <article class="focus-card">
+        <div class="focus-media ph-photo" data-slot="programme-economic"><span class="ph-label">[ADD PHOTO]</span></div>
+        <h3>Economic Empowerment</h3>
+        <p>A clear pathway from skill to enterprise to income to resilience.</p>
+        <a href="our-work.html#economic" class="focus-link">Explore our programs <span>&rsaquo;</span></a>
+      </article>
+
+      <article class="focus-card">
+        <div class="focus-media ph-photo" data-slot="programme-leadership"><span class="ph-label">[ADD PHOTO]</span></div>
+        <h3>Leadership Development</h3>
+        <p>Building the people who will lead the next stage of change in their own communities.</p>
+        <a href="our-work.html#leadership" class="focus-link">Explore our programs <span>&rsaquo;</span></a>
+      </article>
+
+      <article class="focus-card">
+        <div class="focus-media ph-photo" data-slot="programme-community"><span class="ph-label">[ADD PHOTO]</span></div>
+        <h3>Community Development</h3>
+        <p>Working alongside communities and partners to respond to real, local needs.</p>
+        <a href="our-work.html#community" class="focus-link">Explore our programs <span>&rsaquo;</span></a>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ IMPACT AT A GLANCE ============ -->
+  <section class="impact-glance">
+    <div class="impact-inner">
+      <div class="impact-stat impact-stat--verified">
+        <span class="stat-number" data-count="921">0</span><span class="stat-plus">+</span>
+        <p class="stat-label">Participants — South B Community Medical Camp, 31 May 2025</p>
+      </div>
+      <div class="impact-grid">
+        <div class="impact-stat">
+          <span class="stat-placeholder">[ADD VERIFIED NUMBER]</span>
+          <p class="stat-label">Women reached</p>
+        </div>
+        <div class="impact-stat">
+          <span class="stat-placeholder">[ADD VERIFIED NUMBER]</span>
+          <p class="stat-label">Young people reached</p>
+        </div>
+        <div class="impact-stat">
+          <span class="stat-placeholder">[ADD VERIFIED NUMBER]</span>
+          <p class="stat-label">Community initiatives</p>
+        </div>
+        <div class="impact-stat">
+          <span class="stat-placeholder">[ADD VERIFIED NUMBER]</span>
+          <p class="stat-label">Medical beneficiaries</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HEALTHCARE FEATURE ============ -->
+  <section class="health-feature">
+    <div class="health-inner">
+      <div class="health-media ph-photo" data-slot="feature-health"><span class="ph-label">[ADD PHOTO — South B medical camp]</span></div>
+      <div class="health-copy">
+        <p class="section-eyebrow">Healthcare that reaches people</p>
+        <h2>South B Community Medical Camp</h2>
+        <ul class="health-facts">
+          <li><strong>31 May 2025</strong><span>Date</span></li>
+          <li><strong>South B, Nairobi</strong><span>Location</span></li>
+          <li><strong>921 participants</strong><span>Turnout</span></li>
+        </ul>
+        <p>Delivered in collaboration with the Kenya Medical Research Institute (KEMRI), the Betting Control and Licensing Board, and MobiLab Africa — bringing screening, health education and direct care to the community in one coordinated day.</p>
+        <a href="impact.html" class="btn btn-outline">Explore our impact</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WOMEN / YOUTH / COMMUNITIES ============ -->
+  <section class="pillars">
+    <div class="pillars-grid">
+      <div class="pillar">
+        <h3>Women</h3>
+        <p>Economic empowerment, entrepreneurship, leadership and opportunity.</p>
+      </div>
+      <div class="pillar">
+        <h3>Youth</h3>
+        <p>Skills, creativity, leadership, digital opportunity and personal development.</p>
+      </div>
+      <div class="pillar">
+        <h3>Communities</h3>
+        <p>Health, resilience, education, outreach and sustainable development.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TIMELINE ============ -->
+  <section class="timeline" id="timeline">
+    <div class="section-head">
+      <p class="section-eyebrow">From vision to impact</p>
+      <h2>Our story so far</h2>
+    </div>
+    <ol class="timeline-list">
+      <li>
+        <span class="timeline-year">2017</span>
+        <p>External Excellencies Women's Ministry begins — empowering women and youth through entrepreneurship seminars, medical camps and community outreach.</p>
+      </li>
+      <li>
+        <span class="timeline-year">2023</span>
+        <p>The work expands into External Excellencies Global Foundation — a broader, more structured platform for empowerment across health, education, skills and community development.</p>
+      </li>
+      <li>
+        <span class="timeline-year">2025</span>
+        <p>Expanded community health initiatives, including the South B Community Medical Camp in partnership with KEMRI, the Betting Control and Licensing Board, and MobiLab Africa.</p>
+      </li>
+      <li>
+        <span class="timeline-year">2026 &rarr;</span>
+        <p>Building the next chapter.</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============ PARTNERSHIPS ============ -->
+  <section class="partners">
+    <div class="section-head">
+      <p class="section-eyebrow">Partnerships for impact</p>
+      <h2>Working alongside organizations and institutions to deliver meaningful community impact</h2>
+    </div>
+    <div class="partners-row">
+      <div class="partner-chip">KEMRI</div>
+      <div class="partner-chip">Betting Control and Licensing Board</div>
+      <div class="partner-chip">MobiLab Africa</div>
+      <div class="partner-chip partner-chip--ghost">[ADD PARTNER]</div>
+    </div>
+  </section>
+
+  <!-- ============ STORIES OF CHANGE ============ -->
+  <section class="stories-of-change">
+    <div class="section-head">
+      <p class="section-eyebrow">Stories of change</p>
+      <h2>The people behind the numbers</h2>
+    </div>
+    <div class="stories-grid">
+      <article class="story-card">
+        <div class="story-media ph-photo" data-slot="story-1"><span class="ph-label">[ADD PHOTO]</span></div>
+        <p class="story-tag">Beneficiary story</p>
+        <p class="story-placeholder">[ADD VERIFIED BENEFICIARY STORY]</p>
+      </article>
+      <article class="story-card">
+        <div class="story-media ph-photo" data-slot="story-2"><span class="ph-label">[ADD PHOTO]</span></div>
+        <p class="story-tag">Women empowerment</p>
+        <p class="story-placeholder">[ADD VERIFIED WOMEN EMPOWERMENT STORY]</p>
+      </article>
+      <article class="story-card">
+        <div class="story-media ph-photo" data-slot="story-3"><span class="ph-label">[ADD PHOTO]</span></div>
+        <p class="story-tag">Health outreach</p>
+        <p class="story-placeholder">[ADD VERIFIED HEALTH OUTREACH STORY]</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ FOUNDER ============ -->
+  <section class="founder">
+    <div class="founder-inner">
+      <div class="founder-media ph-photo" data-slot="founder"><span class="ph-label">[ADD PHOTO — Rev. Dr. Jane Mwikali Makau]</span></div>
+      <div class="founder-copy">
+        <p class="section-eyebrow">The woman behind the vision</p>
+        <h2>Rev. Dr. Jane Mwikali Makau</h2>
+        <p>Founder and visionary leader whose community-development work shaped the Foundation's mission — from its roots in the External Excellencies Women's Ministry to the broader platform it is today.</p>
+        <a href="about.html#founder" class="focus-link">Meet our founder <span>&rsaquo;</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GET INVOLVED ============ -->
+  <section class="get-involved wave-top">
+    <div class="section-head section-head--light">
+      <p class="section-eyebrow">You can be part of the change</p>
+      <h2>Four ways to get involved</h2>
+    </div>
+    <div class="involved-grid">
+      <a href="get-involved.html#donate" class="involved-card">
+        <h3>Donate</h3>
+        <p>Help strengthen community programs.</p>
+      </a>
+      <a href="get-involved.html#partner" class="involved-card">
+        <h3>Partner</h3>
+        <p>Build meaningful partnerships for impact.</p>
+      </a>
+      <a href="get-involved.html#volunteer" class="involved-card">
+        <h3>Volunteer</h3>
+        <p>Contribute your skills and expertise.</p>
+      </a>
+      <a href="get-involved.html#advocate" class="involved-card">
+        <h3>Advocate</h3>
+        <p>Help amplify stories and opportunities.</p>
+      </a>
+    </div>
+    <div class="involved-cta">
+      <a href="get-involved.html" class="btn btn-primary btn-on-dark">Get Involved</a>
+    </div>
+  </section>
+
+  <!-- ============ LATEST STORIES ============ -->
+  <section class="latest-stories">
+    <div class="section-head">
+      <p class="section-eyebrow">Latest stories</p>
+      <h2>News from the Foundation</h2>
+    </div>
+    <div class="latest-grid">
+      <article class="latest-card">
+        <div class="latest-media ph-photo" data-slot="news-1"><span class="ph-label">[ADD PHOTO]</span></div>
+        <p class="latest-meta">Health &middot; [ADD DATE]</p>
+        <h3>[ADD ARTICLE TITLE]</h3>
+        <p>[ADD SHORT EXCERPT]</p>
+      </article>
+      <article class="latest-card">
+        <div class="latest-media ph-photo" data-slot="news-2"><span class="ph-label">[ADD PHOTO]</span></div>
+        <p class="latest-meta">Community &middot; [ADD DATE]</p>
+        <h3>[ADD ARTICLE TITLE]</h3>
+        <p>[ADD SHORT EXCERPT]</p>
+      </article>
+      <article class="latest-card">
+        <div class="latest-media ph-photo" data-slot="news-3"><span class="ph-label">[ADD PHOTO]</span></div>
+        <p class="latest-meta">Announcements &middot; [ADD DATE]</p>
+        <h3>[ADD ARTICLE TITLE]</h3>
+        <p>[ADD SHORT EXCERPT]</p>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <p class="footer-name">External Excellencies<br>Global Foundation</p>
+      <p class="footer-mission">Building pathways for women, youth and communities to thrive.</p>
+      <form class="newsletter-form" action="#" method="post">
+        <label for="newsletter-email">Stay connected</label>
+        <p class="newsletter-sub">Receive stories, updates and opportunities from the Foundation.</p>
+        <div class="newsletter-row">
+          <input type="email" id="newsletter-email" name="email" placeholder="Your email address" required>
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </div>
+        <p class="newsletter-consent">By subscribing you agree to receive occasional emails from us. Unsubscribe anytime.</p>
+      </form>
+    </div>
+
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul>
+          <li class="has-dropdown">
+          <a href="about.html">About Us</a>
+          <button class="dropdown-toggle" aria-expanded="false" aria-label="Show About Us submenu"><span></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="about.html#story">Our Story</a></li>
+            <li><a href="about.html#values">Our Values</a></li>
+            <li><a href="about.html#founder">Meet the Founder</a></li>
+          </ul>
+        </li>
+          <li class="has-dropdown">
+          <a href="our-work.html">Our Work</a>
+          <button class="dropdown-toggle" aria-expanded="false" aria-label="Show Our Work submenu"><span></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="our-work.html#accelerator">Youth &amp; Women Accelerator 2026</a></li>
+            <li><a href="our-work.html#women">Women's Empowerment</a></li>
+            <li><a href="our-work.html#youth">Youth Development</a></li>
+            <li><a href="our-work.html#health">Health</a></li>
+            <li><a href="our-work.html#education">Education</a></li>
+            <li><a href="our-work.html#economic">Economic Empowerment</a></li>
+            <li><a href="our-work.html#leadership">Leadership</a></li>
+            <li><a href="our-work.html#community">Community</a></li>
+          </ul>
+        </li>
+          <li><a href="impact.html">Our Impact</a></li>
+          <li><a href="stories.html">Stories &amp; News</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Programs</h4>
+        <ul>
+          <li><a href="our-work.html#women">Women Empowerment</a></li>
+          <li><a href="our-work.html#youth">Youth Development</a></li>
+          <li><a href="our-work.html#health">Health &amp; Wellness</a></li>
+          <li><a href="our-work.html#education">Education &amp; Skills</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Get Involved</h4>
+        <ul>
+          <li><a href="get-involved.html#donate">Donate</a></li>
+          <li><a href="get-involved.html#partner">Partner With Us</a></li>
+          <li><a href="get-involved.html#volunteer">Volunteer</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <ul class="footer-social">
+          <li><a href="https://www.facebook.com/p/External-Excellencies-Global-Foundation-61575571245237/" target="_blank" rel="noopener">Facebook</a></li>
+          <li><span class="social-soon">Instagram (link coming soon)</span></li>
+          <li><span class="social-soon">LinkedIn (link coming soon)</span></li>
+          <li><span class="social-soon">X / Twitter (link coming soon)</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; <span id="year"></span> External Excellencies Global Foundation. All rights reserved.</p>
+    <ul>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="terms.html">Terms</a></li>
+      <li><a href="safeguarding.html">Safeguarding</a></li>
+      <li><a href="accessibility.html">Accessibility</a></li>
+      <li><a href="admin.html" class="footer-admin-link">Admin</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script src="site-images.js"></script>
 </body>
 </html>

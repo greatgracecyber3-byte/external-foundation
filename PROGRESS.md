@@ -109,6 +109,31 @@
   partial-fill fixture: fills, removals, reflow, per-project galleries, no JS
   errors, and no horizontal scroll on all 8 content pages at 390px and 1280px.
 
+## Sept 2026 — admin/ folder collapsed into one flat file
+
+- **The dashboard was an `admin/` folder** (`admin/index.html` + `admin/config.yml`).
+  GitHub's browser drag-and-drop upload kept either dropping the folder
+  entirely or nesting it a level too deep (`site-improved/admin/...` instead
+  of `admin/...`), which is a common failure mode for non-technical GitHub
+  users and was confirmed happening in practice.
+- **Replaced with a single file, `admin.html`**, sitting at the site root next
+  to `about.html` and `contact.html`. It uploads to GitHub the same way any
+  other page does — no folder to lose or misplace.
+- The YAML config that used to live in `admin/config.yml` is now a JS object
+  (`DASHBOARD_CONFIG`) embedded directly in `admin.html`, loaded via
+  `window.CMS_MANUAL_INIT = true` + `CMS.init({ config: DASHBOARD_CONFIG })`
+  instead of Decap's default auto-discovered `config.yml`. Converted
+  programmatically from the old YAML (via `yaml.safe_load` → `json.dumps`) to
+  avoid retyping 18 photo spots and 17 projects by hand.
+- All 11 footer links updated from `admin/` to `admin.html`.
+- **Verified**: `admin.html` is valid HTML, the embedded JS passes
+  `node --check`, and the embedded config parses as valid JSON with all 18
+  photo spots and 17 projects intact.
+- Setup guide (`DASHBOARD-SETUP.md`) rewritten to match: uploading is now
+  "select everything inside the folder and drag it in," and connecting the
+  repo means editing one line inside `admin.html` instead of a separate
+  `config.yml`.
+
 ## Still open before this can go fully live
 
 - Real photography — 17 site spots, the slider, and 16 project groups are all
