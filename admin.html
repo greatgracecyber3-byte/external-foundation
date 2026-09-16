@@ -142,11 +142,12 @@
   var DASHBOARD_CONFIG = {
   "backend": {
     "name": "github",
-    "repo": "YOUR-GITHUB-USERNAME/YOUR-REPO-NAME",
+    "repo": "greatgracecyber3-byte/external-foundation",
     "branch": "main",
     "base_url": "https://api.netlify.com",
     "auth_endpoint": "auth"
   },
+  "load_config_file": false,
   "media_folder": "images/gallery",
   "public_folder": "/images/gallery",
   "publish_mode": "simple",
@@ -182,6 +183,61 @@
                   "widget": "string",
                   "required": false
                 }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "custom_photos",
+      "label": "Add your own photo frames",
+      "description": "Create a new photo frame yourself, anywhere on the site. Pick which page it belongs to, pick a shape, upload the photo, and Publish \u2014 it lands in that page's Photo gallery section, in the order you added it.",
+      "files": [
+        {
+          "file": "content/custom-photos.json",
+          "label": "Custom photos",
+          "name": "custom_photos",
+          "format": "json",
+          "fields": [
+            {
+              "label": "Photos",
+              "name": "photos",
+              "widget": "list",
+              "label_singular": "Photo",
+              "required": false,
+              "summary": "{{fields.zone}} \u2014 {{fields.frameType}}",
+              "hint": "Delete an entry to remove that frame from the site.",
+              "fields": [
+                {
+                  "label": "Which page does this go on?",
+                  "name": "zone",
+                  "widget": "select",
+                  "options": [
+                    { "label": "Home", "value": "home" },
+                    { "label": "About Us", "value": "about" },
+                    { "label": "Our Work", "value": "our-work" },
+                    { "label": "Our Impact", "value": "impact" },
+                    { "label": "Get Involved", "value": "get-involved" },
+                    { "label": "Stories & News", "value": "stories" },
+                    { "label": "Contact", "value": "contact" }
+                  ]
+                },
+                {
+                  "label": "Frame shape",
+                  "name": "frameType",
+                  "widget": "select",
+                  "default": "landscape",
+                  "options": [
+                    { "label": "Square", "value": "square" },
+                    { "label": "Portrait (tall)", "value": "portrait" },
+                    { "label": "Landscape (standard)", "value": "landscape" },
+                    { "label": "Wide banner (full width)", "value": "wide" }
+                  ]
+                },
+                { "label": "Photo", "name": "image", "widget": "image" },
+                { "label": "Description for screen readers", "name": "alt", "widget": "string", "required": false },
+                { "label": "Caption shown under the photo", "name": "caption", "widget": "string", "required": false }
               ]
             }
           ]
