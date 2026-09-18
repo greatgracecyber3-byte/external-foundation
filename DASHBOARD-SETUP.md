@@ -25,7 +25,7 @@ slider with no frames is not a slider.
 
 ---
 
-## Part 1 — Connect it (once, about 20 minutes)
+## Part 1 — Connect it (once, about 5 minutes)
 
 1. **Put the site in a GitHub repository.** Create a free account at
    github.com, make a new repository. Then open the unzipped site folder on
@@ -45,27 +45,31 @@ slider with no frames is not a slider.
    re-upload just this one file to GitHub: **Add file → Upload files → drag in
    `admin.html` → Commit changes.**
 
-3. **Deploy on Netlify.** Sign in at netlify.com with GitHub → "Add new site" →
-   "Import an existing project" → pick the repository.
+3. **Turn on GitHub Pages (or whatever host you use).** In your repository on
+   GitHub: **Settings → Pages → Deploy from a branch → `main`**. Your site
+   goes live at `https://your-username.github.io/your-repo-name/` a minute
+   or two later. (If you host elsewhere, this step is whatever your host
+   normally asks for — nothing about the dashboard changes.)
 
-4. **Turn on logins.** In that site's Netlify settings, go to
-   **Site configuration → Identity** → Enable Identity. Then
-   **Identity → Services → Git Gateway** → Enable.
+4. Go to `yoursite.com/admin.html`, enter the door password
+   (`KaribuKenya@23`, unless you've changed it), then click **Sign in with
+   GitHub** and approve the popup. That's it — there's no separate service to
+   configure. The first time, GitHub will ask you to authorize the one-time
+   sign-in; approve it and you're in the editor.
 
-5. **Invite yourself.** Under Identity click "Invite users", enter your email,
-   accept the invitation, set a password.
-
-6. Go to `yoursite.com/admin.html`, enter the door password
-   (`KaribuKenya@23`, unless you've changed it), then log in with the account
-   from step 5.
+   If the popup gets blocked or you'd rather not use the popup flow, use a
+   **personal access token** instead: on GitHub go to **Settings → Developer
+   settings → Personal access tokens → Fine-grained tokens → Generate new
+   token**, give it read/write access to "Contents" on just this repository,
+   then paste that token into the dashboard's sign-in screen.
 
 ### Seeing it before you do any of that
 
 Serve the folder locally (for example `python3 -m http.server` in the site
 folder) and open `admin.html` in a browser. The password screen works
-immediately. The editor behind it needs the repository connected (step 2)
-and, to actually log in and save, Netlify Identity (steps 3–5) — until those
-are done you'll see a "not connected yet" message, which is expected.
+immediately. The editor behind it needs the repository connected (step 2) to
+save changes — until then you'll see a "not connected yet" message, which is
+expected.
 
 ---
 

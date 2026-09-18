@@ -184,7 +184,16 @@ img.ph-photo {
   text-decoration: none;
   color: var(--forest-deep);
   line-height: 1.15;
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
 }
 .logo span { display: block; font-size: 0.62rem; font-family: var(--font-body); font-weight: 500; color: var(--sand); letter-spacing: 0.06em; margin-top: 2px; }
 
@@ -717,7 +726,7 @@ section { padding: clamp(32px, 4.5vw, 60px) var(--gutter); }
   gap: clamp(32px, 5vw, 64px);
   align-items: center;
 }
-.founder-media { aspect-ratio: 3/4; border-radius: var(--radius); }
+.founder-media { aspect-ratio: 3/4; border-radius: var(--radius); max-height: 440px; }
 .founder-copy h2 { font-size: clamp(1.8rem, 3.4vw, 2.4rem); }
 
 /* ============ GET INVOLVED ============ */
@@ -953,15 +962,23 @@ body.nav-open { overflow: hidden; }
    part of the design rather than a broken image. */
 .ph-photo {
   position: relative;
-  border: 1px solid var(--forest-tint-line);
+  border: 1.5px dashed var(--sand, #7A6650);
   background:
-    repeating-linear-gradient(135deg, rgba(22,48,42,0.05) 0 1px, transparent 1px 13px),
+    repeating-linear-gradient(135deg, rgba(22,48,42,0.07) 0 2px, transparent 2px 15px),
     linear-gradient(160deg, #E7DFCC 0%, #D6CCB2 100%);
 }
+.ph-photo::before {
+  content: "📷";
+  font-size: 1.6rem;
+  display: block;
+  margin-bottom: 8px;
+  opacity: 0.55;
+}
 .ph-label {
-  font-size: 0.72rem;
+  font-size: 0.78rem;
+  font-weight: 600;
   line-height: 1.45;
-  color: #6f5d47;
+  color: #5b4a35;
   max-width: 24ch;
 }
 

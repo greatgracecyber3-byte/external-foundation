@@ -79,8 +79,7 @@
   <ol>
     <li>Put this website in a GitHub repository.</li>
     <li>Open <code>admin.html</code>, find <code>"repo": "YOUR-GITHUB-USERNAME/YOUR-REPO-NAME"</code> near the bottom, and change it to your real repository.</li>
-    <li>Deploy the site on Netlify and turn on <strong>Identity</strong> and <strong>Git Gateway</strong> in the Netlify site settings.</li>
-    <li>Invite yourself as a user under Identity, accept the email, then come back here and log in.</li>
+    <li>Come back here and click <strong>Sign in with GitHub</strong>, or paste a GitHub personal access token — no Netlify, no other service needed.</li>
   </ol>
   <p class="sub">Full walkthrough in <code>DASHBOARD-SETUP.md</code>.</p>
 </div>
@@ -108,13 +107,18 @@
     else { err.style.display = 'block'; input.value = ''; input.focus(); }
   }
 
-  // Stop Decap CMS auto-initialising from a config.yml file (there isn't
+  // Stop the CMS auto-initialising from a config.yml file (there isn't
   // one) — the configuration is the JS object below instead.
   window.CMS_MANUAL_INIT = true;
 
   function loadCMS() {
     var s = document.createElement('script');
-    s.src = 'https://unpkg.com/decap-cms@^3.7.0/dist/decap-cms.js';
+    // Sveltia CMS — a Decap/Netlify CMS-compatible editor with no Netlify
+    // dependency. For a GitHub backend it signs in with either "Sign in with
+    // GitHub" (a small first-run popup) or a pasted personal access token —
+    // nothing to deploy, nothing hosted on Netlify.
+    s.src = 'https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js';
+    s.type = 'module';
     s.onload = function () {
       CMS.init({ config: DASHBOARD_CONFIG });
       var tries = 0;
@@ -143,9 +147,7 @@
   "backend": {
     "name": "github",
     "repo": "greatgracecyber3-byte/external-foundation",
-    "branch": "main",
-    "base_url": "https://api.netlify.com",
-    "auth_endpoint": "auth"
+    "branch": "main"
   },
   "load_config_file": false,
   "media_folder": "images/gallery",

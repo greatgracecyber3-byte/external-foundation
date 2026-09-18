@@ -132,7 +132,7 @@
   gap: clamp(32px, 5vw, 64px);
   align-items: start;
 }
-.founder-full-media { aspect-ratio: 3/4; border-radius: var(--radius); }
+.founder-full-media { aspect-ratio: 3/4; border-radius: var(--radius); max-height: 440px; }
 .founder-role { color: var(--sand); font-weight: 600; margin-top: -8px; }
 .founder-detail-grid {
   margin-top: 28px;

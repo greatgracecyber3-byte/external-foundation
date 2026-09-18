@@ -8,8 +8,14 @@ backend:
   name: github
   repo: YOUR-GITHUB-USERNAME/YOUR-REPO-NAME   # <-- CHANGE THIS, e.g. janemakau/eegf-website
   branch: main
-  base_url: https://api.netlify.com
-  auth_endpoint: auth
+  # No Netlify anywhere: the live dashboard (admin.html) runs on Sveltia CMS,
+  # which signs in with "Sign in with GitHub" or a personal access token —
+  # no OAuth proxy, no third-party service to deploy or pay for.
+
+# This file is kept only as a reference for anyone who prefers a normal
+# admin/config.yml setup instead of the single-file admin.html dashboard.
+# admin.html does not read this file (load_config_file: false) — its own
+# settings are the ones that matter for the live site.
 
 # Uncomment to try the dashboard on your own laptop with no login
 # (run `npx decap-server` in another terminal first).
