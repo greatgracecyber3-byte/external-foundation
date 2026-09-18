@@ -98,6 +98,22 @@
         markReflow(parent);
       }
     });
+
+    // Unverified numbers work the same way as unfilled photos: rather than
+    // ever inventing a figure, an unfilled stat is removed — not shown with
+    // a placeholder, not shown with a guessed number. Real figures replace
+    // this removal once they exist and are entered in the dashboard.
+    document.querySelectorAll('.stat-placeholder').forEach(function (span) {
+      var stat = span.closest('.impact-stat');
+      if (stat) stat.remove();
+    });
+    // Only the programme "Impact" figures on Our Work are stripped this
+    // way — contact details (address/phone/email) are left as visible
+    // placeholders instead of being deleted, since a contact page with no
+    // way to reach the Foundation at all is worse than one that says so.
+    document.querySelectorAll('.program-fields > div').forEach(function (field) {
+      if (field.querySelector('.ph-inline')) field.remove();
+    });
   }
 
   /* ---------- 1. named frames -------------------------------- */
