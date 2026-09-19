@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (e.key === 'Escape') closeAllDropdowns();
   });
 
-  // Hero image carousel — auto-fetches uploaded photos from content/gallery.json
+  // Hero image carousel — auto-loads uploaded photos from Supabase (site_content → gallery)
   // (written by the /admin image dashboard). Falls back to the placeholder
   // slides already in the HTML if that file is empty or missing.
   var heroCarousel = document.getElementById('hero-carousel');
@@ -110,11 +110,11 @@ document.addEventListener('DOMContentLoaded', function () {
     heroCarousel.addEventListener('mouseleave', restart);
 
     // Try to load images uploaded via the admin dashboard
-    fetch('content/gallery.json')
-      .then(function (r) { return r.ok ? r.json() : null; })
+    loadSiteContent('gallery')
       .then(function (data) {
-        if (data && Array.isArray(data.slides) && data.slides.length) {
-          track.innerHTML = data.slides.map(function (s, i) {
+        var slides = data && Array.isArray(data.slides) ? data.slides.filter(function (s) { return s && s.image; }) : [];
+        if (slides.length) {
+          track.innerHTML = slides.map(function (s, i) {
             return '<div class="hero-slide' + (i === 0 ? ' is-active' : '') + '">' +
               '<img class="visual-block ph-photo" src="' + s.image + '" alt="' + (s.caption || '') + '">' +
               (s.caption ? '<p class="hero-slide-caption">' + s.caption + '</p>' : '') +
@@ -126,6 +126,26 @@ document.addEventListener('DOMContentLoaded', function () {
       })
       .catch(function () { buildDots(); restart(); });
   }
+
+  // Footer newsletter signup — saves the email to Supabase
+  document.querySelectorAll('.newsletter-form').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var input = form.querySelector('input[type="email"]');
+      var btn = form.querySelector('button[type="submit"]');
+      var note = form.querySelector('.newsletter-consent');
+      btn.disabled = true;
+      submitToSupabase('newsletter_subscribers', { email: input.value.trim() })
+        .then(function () {
+          form.reset();
+          if (note) note.textContent = 'Thank you — you are subscribed.';
+        })
+        .catch(function () {
+          if (note) note.textContent = 'Sorry, that did not go through. Please try again.';
+        })
+        .then(function () { btn.disabled = false; });
+    });
+  });
 
   // Scroll cue: jump to next section
   var cue = document.getElementById('scroll-cue');

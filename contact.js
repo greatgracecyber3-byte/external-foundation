@@ -1,4 +1,4 @@
-// Contact page — preselect reason from ?reason= query param, placeholder submit handling
+// Contact page — preselect reason from ?reason= query param, save messages to Supabase
 document.addEventListener('DOMContentLoaded', function () {
 
   var params = new URLSearchParams(window.location.search);
@@ -13,9 +13,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var form = document.getElementById('contact-form');
   if (form) {
+    var note = form.querySelector('.form-note');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      alert('This form is not yet connected to a backend. Wire it to a form service (e.g. Formspree) before publishing.');
+      var btn = form.querySelector('button[type="submit"]');
+      var d = new FormData(form);
+      btn.disabled = true;
+      note.textContent = 'Sending…';
+      submitToSupabase('contact_messages', {
+        name: d.get('name'), email: d.get('email'), phone: d.get('phone') || null,
+        reason: d.get('reason'), message: d.get('message')
+      }).then(function () {
+        form.reset();
+        note.textContent = 'Thank you — your message has been sent. We will be in touch.';
+      }).catch(function () {
+        note.textContent = 'Sorry, your message could not be sent. Please try again in a moment.';
+      }).then(function () { btn.disabled = false; });
     });
   }
 });

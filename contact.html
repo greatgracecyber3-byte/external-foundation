@@ -102,7 +102,7 @@
           </div>
           <div>
             <dt>Office hours</dt>
-            <dd class="ph-inline">[ADD OFFICE HOURS]</dd>
+            <dd>8:00 am – 5:00 pm</dd>
           </div>
         </dl>
 
@@ -144,7 +144,7 @@
           <textarea id="c-message" name="message" rows="6" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Send message</button>
-        <p class="form-note">This form has no backend connected yet — wire it to a form service (e.g. Formspree) before publishing.</p>
+        <p class="form-note" role="status" aria-live="polite"></p>
       </form>
 
     </div>
@@ -248,6 +248,7 @@
   </div>
 </footer>
 
+<script src="supabase-config.js"></script>
 <script src="main.js"></script>
 <script src="contact.js"></script>
 <script src="site-images.js"></script>

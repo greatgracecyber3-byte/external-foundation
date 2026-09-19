@@ -1,17 +1,16 @@
 # PROGRESS
 
-## Sept 2026 — Netlify removed from the dashboard entirely
+## Sept 2026 — dashboard moved to Supabase
 
-- **`admin.html` now runs on Sveltia CMS** instead of Decap CMS — a
-  Decap-compatible editor that authenticates straight against GitHub
-  ("Sign in with GitHub" or a pasted personal access token). The
-  `base_url`/`auth_endpoint` pointing at `api.netlify.com` is gone.
-- **No Netlify anywhere in the setup path.** `DASHBOARD-SETUP.md` no longer
-  tells anyone to deploy on Netlify or turn on Identity/Git Gateway; hosting
-  is GitHub Pages (or any static host — nothing about the dashboard cares),
-  and login is a GitHub sign-in popup or a personal access token.
-- **`config.yml`** (kept only as a reference file — `admin.html` doesn't read
-  it) had the same Netlify OAuth lines removed.
+- **`admin.html`** is now a small Supabase dashboard (email + password sign-in,
+  photo uploads to Supabase Storage, content saved to a `site_content` table).
+  The GitHub / Sveltia CMS setup is gone.
+- **`supabase-config.js`** holds the project URL and anon key. `main.js`,
+  `site-images.js` and `custom-photos.js` now read from Supabase instead of
+  `content/*.json`.
+- **`supabase-setup.sql`** creates the table, storage bucket and access rules.
+  Steps are in `DASHBOARD-SETUP.md`.
+- Removed `config.yml` and the stray old Decap admin copy (`index (1).html`).
 
 ## What changed in this pass (verified against the site's own files, not just claimed)
 

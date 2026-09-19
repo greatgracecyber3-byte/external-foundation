@@ -51,8 +51,7 @@
     section.classList.add('has-photos');
   }
 
-  fetch('content/custom-photos.json', { cache: 'no-cache' })
-    .then(function (r) { return r.ok ? r.json() : null; })
+  loadSiteContent('custom-photos')
     .then(function (data) {
       var byZone = {};
       if (data && Array.isArray(data.photos)) {

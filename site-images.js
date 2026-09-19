@@ -173,8 +173,7 @@
     document.documentElement.classList.add('photos-ready');
   }
 
-  fetch('content/images.json', { cache: 'no-cache' })
-    .then(function (r) { return r.ok ? r.json() : null; })
+  loadSiteContent('images')
     .then(function (data) {
       if (data) {
         if (data.settings && typeof data.settings.showPlaceholders === 'boolean') {

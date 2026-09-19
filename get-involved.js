@@ -26,12 +26,25 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Volunteer form — placeholder submit handling (no backend yet)
+  // Volunteer form — saves to Supabase
   var volunteerForm = document.querySelector('.volunteer-form');
   if (volunteerForm) {
+    var vNote = volunteerForm.querySelector('.form-note');
     volunteerForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      alert('This form is not yet connected to a backend. Wire it to a form service (e.g. Formspree) before publishing.');
+      var btn = volunteerForm.querySelector('button[type="submit"]');
+      var d = new FormData(volunteerForm);
+      btn.disabled = true;
+      vNote.textContent = 'Sending…';
+      submitToSupabase('volunteer_signups', {
+        name: d.get('name'), email: d.get('email'), phone: d.get('phone') || null,
+        interests: d.getAll('interest'), message: d.get('message') || null
+      }).then(function () {
+        volunteerForm.reset();
+        vNote.textContent = 'Thank you — we have your details and will be in touch about opportunities.';
+      }).catch(function () {
+        vNote.textContent = 'Sorry, that could not be sent. Please try again in a moment.';
+      }).then(function () { btn.disabled = false; });
     });
   }
 });

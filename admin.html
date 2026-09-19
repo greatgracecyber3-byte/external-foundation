@@ -38,122 +38,284 @@
   .spinner { display:inline-block; width:14px; height:14px; border:2px solid #d9d2c2; border-top-color:var(--forest); border-radius:50%; animation:spin .8s linear infinite; vertical-align:-2px; margin-right:8px; }
   @keyframes spin { to { transform:rotate(360deg); } }
   @media (prefers-reduced-motion: reduce) { .spinner { animation:none; } }
+
+  #gate input[type=email] { display:block; }
+  #app { display:none; }
+  .bar { display:flex; align-items:center; gap:14px; padding:14px 24px; background:var(--forest-deep); color:var(--ivory); }
+  .bar strong { font-family:"Source Serif 4",Georgia,serif; font-size:1.1rem; flex:1; }
+  .bar span { font-size:0.85rem; opacity:.8; }
+  .bar button { background:transparent; color:var(--ivory); border:1px solid rgba(255,255,255,.4); border-radius:4px; padding:6px 12px; cursor:pointer; font:inherit; font-size:0.85rem; }
+  #tabs { display:flex; gap:6px; flex-wrap:wrap; padding:14px 24px 0; border-bottom:1px solid #e3dccb; }
+  #tabs button { background:none; border:none; border-bottom:3px solid transparent; padding:10px 14px; font:inherit; font-weight:600; color:var(--sand); cursor:pointer; }
+  #tabs button.on { color:var(--forest-deep); border-bottom-color:var(--gold); }
+  #panel { max-width:760px; margin:0 auto; padding:28px 24px 80px; }
+  #panel h2 { font-family:"Source Serif 4",Georgia,serif; color:var(--forest-deep); margin:0 0 6px; }
+  #panel h3 { margin:26px 0 6px; color:var(--forest-deep); font-size:1.05rem; }
+  .desc, .hint { color:var(--sand); font-size:0.88rem; line-height:1.55; margin:0 0 14px; }
+  .hint { font-size:0.8rem; margin:4px 0 0; }
+  .field { margin-bottom:16px; }
+  .field > label { display:block; font-weight:600; font-size:0.9rem; margin-bottom:6px; }
+  .field input[type=text], .field select { width:100%; box-sizing:border-box; padding:10px 12px; font:inherit; border:1px solid #d9d2c2; border-radius:4px; background:#fff; }
+  .field.check label { display:flex; gap:10px; align-items:flex-start; font-weight:600; font-size:0.9rem; }
+  .item { border:1px solid #e3dccb; background:#fff; border-radius:6px; padding:16px; margin-bottom:14px; }
+  .item-head { display:flex; gap:6px; align-items:center; margin-bottom:12px; }
+  .item-title { flex:1; font-weight:600; color:var(--forest); }
+  .item .item { background:#FAF8F3; }
+  fieldset.obj { border:1px solid #e3dccb; border-radius:6px; padding:14px 16px 4px; margin:0 0 16px; }
+  fieldset.obj legend { font-weight:600; padding:0 6px; }
+  .btn { background:#fff; border:1px solid #d9d2c2; border-radius:4px; padding:7px 12px; font:inherit; font-size:0.85rem; cursor:pointer; }
+  .btn.danger { color:var(--clay); }
+  .btn.primary { background:var(--forest); color:var(--ivory); border-color:var(--forest); font-weight:600; padding:12px 22px; font-size:0.95rem; }
+  .btn:disabled { opacity:.6; cursor:wait; }
+  .thumb { display:block; max-width:180px; max-height:120px; border-radius:4px; margin-bottom:8px; }
+  .status { font-size:0.82rem; color:var(--sand); margin-left:8px; }
+  .publish-row { margin-top:28px; padding-top:20px; border-top:1px solid #e3dccb; }
 </style>
 </head>
 <body>
 
 <!-- ============================================================
-     ONE SINGLE FILE — admin.html
+     admin.html — photo dashboard, powered by Supabase
      ------------------------------------------------------------
-     This page used to be a folder (admin/index.html + admin/config.yml).
-     It is now one plain file, sitting next to about.html, contact.html
-     and every other page, because a folder was tripping up GitHub's
-     web upload. The dashboard's whole configuration — which photo spots
-     exist, what the repo name is — is embedded directly below as a
-     block of settings, instead of living in a separate config.yml file.
-
-     TO CONNECT THIS TO YOUR REPOSITORY:
-     Find the line a little further down that says
-         "repo": "YOUR-GITHUB-USERNAME/YOUR-REPO-NAME"
-     and change it to your real one, e.g. "janemakau/eegf-website".
-     That is the only edit required.
+     Sign in with the admin user you created in Supabase
+     (Authentication → Users). Changes are saved to the
+     `site_content` table and photos go to the `gallery` storage
+     bucket. Keys live in supabase-config.js. Setup steps are in
+     DASHBOARD-SETUP.md.
      ============================================================ -->
 
 <div id="gate">
   <div class="rule"></div>
   <h1>Photo dashboard</h1>
-  <p>Enter the password to continue.</p>
-  <input type="password" id="gate-input" placeholder="Password" autocomplete="off" />
-  <button id="gate-submit">Enter</button>
-  <p class="err" id="gate-err">That password isn't right. Try again.</p>
-  <p class="note">This screen only keeps out casual visitors — it isn't a real
-    login. The actual access control happens on the next screen, where you sign
-    in with the account set up for this site.</p>
+  <p>Sign in with your admin account.</p>
+  <input type="email" id="login-email" placeholder="Email" autocomplete="username" />
+  <input type="password" id="login-pass" placeholder="Password" autocomplete="current-password" />
+  <button id="login-btn">Sign in</button>
+  <p class="err" id="login-err"></p>
 </div>
 
-<div id="boot">
-  <div class="rule"></div>
-  <h1>Loading the editor…</h1>
-  <p class="sub"><span class="spinner"></span>This can take a few seconds.</p>
-  <p class="sub">If this message stays on screen, the dashboard has not been connected to a repository yet. To connect it:</p>
-  <ol>
-    <li>Put this website in a GitHub repository.</li>
-    <li>Open <code>admin.html</code>, find <code>"repo": "YOUR-GITHUB-USERNAME/YOUR-REPO-NAME"</code> near the bottom, and change it to your real repository.</li>
-    <li>Come back here and click <strong>Sign in with GitHub</strong>, or paste a GitHub personal access token — no Netlify, no other service needed.</li>
-  </ol>
-  <p class="sub">Full walkthrough in <code>DASHBOARD-SETUP.md</code>.</p>
+<div id="app">
+  <div class="bar"><strong>Photo dashboard</strong><span id="who"></span><button id="logout">Sign out</button></div>
+  <div id="tabs"></div>
+  <div id="panel"></div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
 <script>
-  // Changing the door password: edit the string on the right, save, re-upload.
-  var GATE_PASSWORD = "KaribuKenya@23";
+  var sb = null;
+  var CONTENT = {};   // key -> data, e.g. CONTENT.gallery = { slides: [...] }
 
-  var gate  = document.getElementById('gate');
-  var boot  = document.getElementById('boot');
-  var input = document.getElementById('gate-input');
-  var err   = document.getElementById('gate-err');
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function showLoginError(msg) { var e = $('login-err'); e.textContent = msg; e.style.display = 'block'; }
 
-  function unlock() {
-    sessionStorage.setItem('eegf-admin-unlocked', '1');
-    gate.style.display = 'none';
-    boot.style.display = 'block';
-    loadCMS();
+  /* ---------- sign in ---------- */
+
+  var connected = window.SUPABASE_URL && window.SUPABASE_URL.indexOf('YOUR-') === -1 &&
+                  window.SUPABASE_ANON_KEY && window.SUPABASE_ANON_KEY.indexOf('YOUR-') === -1;
+
+  if (!connected || !window.supabase) {
+    showLoginError('Not connected yet. Open supabase-config.js and paste your Supabase project URL and anon key.');
+    $('login-btn').disabled = true;
+  } else {
+    sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+    sb.auth.getSession().then(function (r) { if (r.data.session) start(r.data.session); });
   }
 
-  document.getElementById('gate-submit').addEventListener('click', check);
-  input.addEventListener('keydown', function (e) { if (e.key === 'Enter') check(); });
-  function check() {
-    if (input.value === GATE_PASSWORD) { unlock(); }
-    else { err.style.display = 'block'; input.value = ''; input.focus(); }
+  async function doLogin() {
+    if (!sb) return;
+    $('login-err').style.display = 'none';
+    var r = await sb.auth.signInWithPassword({ email: $('login-email').value.trim(), password: $('login-pass').value });
+    if (r.error) return showLoginError(r.error.message);
+    start(r.data.session);
+  }
+  $('login-btn').addEventListener('click', doLogin);
+  $('login-pass').addEventListener('keydown', function (e) { if (e.key === 'Enter') doLogin(); });
+  $('logout').addEventListener('click', async function () { await sb.auth.signOut(); location.reload(); });
+
+  async function start(session) {
+    $('gate').style.display = 'none';
+    $('app').style.display = 'block';
+    $('who').textContent = session.user.email;
+    var r = await sb.from('site_content').select('key,data');
+    if (r.error) alert('Could not load content: ' + r.error.message + '\n\nHave you run supabase-setup.sql yet?');
+    CONTENT = {};
+    (r.data || []).forEach(function (row) { CONTENT[row.key] = row.data || {}; });
+    buildTabs();
+    showTab(0);
   }
 
-  // Stop the CMS auto-initialising from a config.yml file (there isn't
-  // one) — the configuration is the JS object below instead.
-  window.CMS_MANUAL_INIT = true;
+  /* ---------- tabs = the collections in DASHBOARD_CONFIG ---------- */
 
-  function loadCMS() {
-    var s = document.createElement('script');
-    // Sveltia CMS — a Decap/Netlify CMS-compatible editor with no Netlify
-    // dependency. For a GitHub backend it signs in with either "Sign in with
-    // GitHub" (a small first-run popup) or a pasted personal access token —
-    // nothing to deploy, nothing hosted on Netlify.
-    s.src = 'https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js';
-    s.type = 'module';
-    s.onload = function () {
-      CMS.init({ config: DASHBOARD_CONFIG });
-      var tries = 0;
-      var check2 = setInterval(function () {
-        if (document.querySelector('#nc-root, [class*="AppMainContainer"]')) {
-          boot.remove();
-          clearInterval(check2);
+  function keyOf(col) { return col.files[0].file.replace(/^content\//, '').replace(/\.json$/, ''); }
+
+  function buildTabs() {
+    var tabs = $('tabs');
+    tabs.innerHTML = '';
+    DASHBOARD_CONFIG.collections.forEach(function (col, i) {
+      var b = el('button', null, col.label);
+      b.addEventListener('click', function () { showTab(i); });
+      tabs.appendChild(b);
+    });
+  }
+
+  function showTab(i) {
+    Array.prototype.forEach.call($('tabs').children, function (b, n) { b.className = n === i ? 'on' : ''; });
+    var col = DASHBOARD_CONFIG.collections[i];
+    var key = keyOf(col);
+    if (!CONTENT[key]) CONTENT[key] = {};
+
+    var panel = $('panel');
+    panel.innerHTML = '';
+    panel.appendChild(el('h2', null, col.label));
+    panel.appendChild(el('p', 'desc', col.description || ''));
+    renderFields(col.files[0].fields, CONTENT[key], panel);
+
+    var row = el('div', 'publish-row');
+    var btn = el('button', 'btn primary', 'Publish');
+    var status = el('span', 'status');
+    btn.addEventListener('click', async function () {
+      btn.disabled = true;
+      status.textContent = 'Publishing…';
+      var r = await sb.from('site_content').upsert({ key: key, data: CONTENT[key], updated_at: new Date().toISOString() });
+      btn.disabled = false;
+      status.textContent = r.error ? 'Failed: ' + r.error.message : 'Published ✓ — live on the site now.';
+    });
+    row.appendChild(btn);
+    row.appendChild(status);
+    panel.appendChild(row);
+  }
+
+  /* ---------- tiny form builder (string, boolean, select, image, object, list) ---------- */
+
+  function renderFields(fields, data, parent) {
+    fields.forEach(function (f) { parent.appendChild(renderField(f, data)); });
+  }
+
+  function renderField(f, data) {
+    if (f.widget === 'list') return renderList(f, data);
+
+    if (f.widget === 'object') {
+      var box = el('fieldset', 'obj');
+      box.appendChild(el('legend', null, f.label));
+      data[f.name] = data[f.name] || {};
+      renderFields(f.fields, data[f.name], box);
+      return box;
+    }
+
+    var wrap = el('div', 'field');
+
+    if (f.widget === 'boolean') {
+      if (data[f.name] === undefined) data[f.name] = !!f.default;
+      wrap.className = 'field check';
+      var lab = el('label');
+      var cb = el('input'); cb.type = 'checkbox'; cb.checked = !!data[f.name];
+      cb.addEventListener('change', function () { data[f.name] = cb.checked; });
+      lab.appendChild(cb);
+      lab.appendChild(document.createTextNode(f.label));
+      wrap.appendChild(lab);
+    } else {
+      wrap.appendChild(el('label', null, f.label));
+
+      if (f.widget === 'select') {
+        if (data[f.name] === undefined) data[f.name] = f.default !== undefined ? f.default : f.options[0].value;
+        var sel = el('select');
+        f.options.forEach(function (o) {
+          var opt = el('option', null, o.label); opt.value = o.value; sel.appendChild(opt);
+        });
+        if (!f.options.some(function (o) { return o.value === data[f.name]; })) {
+          var extra = el('option', null, data[f.name]); extra.value = data[f.name]; sel.appendChild(extra);
         }
-        if (++tries > 40) clearInterval(check2);
-      }, 300);
-    };
-    document.body.appendChild(s);
+        sel.value = data[f.name];
+        sel.addEventListener('change', function () { data[f.name] = sel.value; });
+        wrap.appendChild(sel);
+
+      } else if (f.widget === 'image') {
+        var img = el('img', 'thumb');
+        if (data[f.name]) img.src = data[f.name]; else img.style.display = 'none';
+        var file = el('input'); file.type = 'file'; file.accept = 'image/*';
+        var st = el('span', 'status');
+        file.addEventListener('change', async function () {
+          var picked = file.files[0];
+          if (!picked) return;
+          st.textContent = 'Uploading…';
+          try {
+            var url = await uploadImage(picked);
+            data[f.name] = url;
+            img.src = url; img.style.display = 'block';
+            st.textContent = 'Uploaded ✓ — click Publish to save.';
+          } catch (e) { st.textContent = 'Upload failed: ' + e.message; }
+        });
+        wrap.appendChild(img);
+        wrap.appendChild(file);
+        wrap.appendChild(st);
+
+      } else {   // string
+        var inp = el('input'); inp.type = 'text'; inp.value = data[f.name] || '';
+        inp.addEventListener('input', function () { data[f.name] = inp.value; });
+        wrap.appendChild(inp);
+      }
+    }
+
+    if (f.hint) wrap.appendChild(el('p', 'hint', f.hint));
+    return wrap;
   }
 
-  if (sessionStorage.getItem('eegf-admin-unlocked') === '1') unlock();
-  else input.focus();
+  function renderList(f, data) {
+    data[f.name] = data[f.name] || [];
+    var items = data[f.name];
+    var box = el('div');
+    box.appendChild(el('h3', null, f.label));
+    if (f.hint) box.appendChild(el('p', 'hint', f.hint));
+    var holder = el('div');
+    box.appendChild(holder);
+
+    function draw() {
+      holder.innerHTML = '';
+      items.forEach(function (item, i) {
+        var card = el('div', 'item');
+        var head = el('div', 'item-head');
+        head.appendChild(el('span', 'item-title', (f.label_singular || 'Item') + ' ' + (i + 1)));
+        function small(label, cls, fn) {
+          var b = el('button', 'btn' + (cls ? ' ' + cls : ''), label);
+          b.addEventListener('click', fn);
+          head.appendChild(b);
+        }
+        small('↑', '', function () { if (i > 0) { var t = items[i - 1]; items[i - 1] = items[i]; items[i] = t; draw(); } });
+        small('↓', '', function () { if (i < items.length - 1) { var t = items[i + 1]; items[i + 1] = items[i]; items[i] = t; draw(); } });
+        small('Remove', 'danger', function () { items.splice(i, 1); draw(); });
+        card.appendChild(head);
+        renderFields(f.fields, item, card);
+        holder.appendChild(card);
+      });
+    }
+
+    var add = el('button', 'btn', '+ Add ' + (f.label_singular || 'item').toLowerCase());
+    add.addEventListener('click', function () { items.push({}); draw(); });
+    box.appendChild(add);
+    draw();
+    return box;
+  }
+
+  async function uploadImage(file) {
+    var bucket = window.SUPABASE_BUCKET || 'gallery';
+    var name = Date.now() + '-' + file.name.toLowerCase().replace(/[^a-z0-9.]+/g, '-');
+    var r = await sb.storage.from(bucket).upload(name, file, { cacheControl: '31536000', upsert: false, contentType: file.type });
+    if (r.error) throw r.error;
+    return sb.storage.from(bucket).getPublicUrl(name).data.publicUrl;
+  }
 
   // ============================================================
   // DASHBOARD CONFIGURATION
-  // ------------------------------------------------------------
-  // Everything the CMS needs to know: where photos get saved, and
-  // the full list of photo spots and projects across the site.
-  // Change the "repo" line below to connect this to your repository.
+  // The tabs, photo spots and project list shown above.
   // ============================================================
   var DASHBOARD_CONFIG = {
-  "backend": {
-    "name": "github",
-    "repo": "greatgracecyber3-byte/external-foundation",
-    "branch": "main"
-  },
-  "load_config_file": false,
-  "media_folder": "images/gallery",
-  "public_folder": "/images/gallery",
-  "publish_mode": "simple",
-  "logo_url": "",
   "collections": [
     {
       "name": "slider",
@@ -194,7 +356,7 @@
     {
       "name": "custom_photos",
       "label": "Add your own photo frames",
-      "description": "Create a new photo frame yourself, anywhere on the site. Pick which page it belongs to, pick a shape, upload the photo, and Publish \u2014 it lands in that page's Photo gallery section, in the order you added it.",
+      "description": "Create a new photo frame yourself, anywhere on the site. Pick which page it belongs to, pick a shape, upload the photo, and Publish — it lands in that page's Photo gallery section, in the order you added it.",
       "files": [
         {
           "file": "content/custom-photos.json",
@@ -208,7 +370,7 @@
               "widget": "list",
               "label_singular": "Photo",
               "required": false,
-              "summary": "{{fields.zone}} \u2014 {{fields.frameType}}",
+              "summary": "{{fields.zone}} — {{fields.frameType}}",
               "hint": "Delete an entry to remove that frame from the site.",
               "fields": [
                 {
@@ -216,13 +378,34 @@
                   "name": "zone",
                   "widget": "select",
                   "options": [
-                    { "label": "Home", "value": "home" },
-                    { "label": "About Us", "value": "about" },
-                    { "label": "Our Work", "value": "our-work" },
-                    { "label": "Our Impact", "value": "impact" },
-                    { "label": "Get Involved", "value": "get-involved" },
-                    { "label": "Stories & News", "value": "stories" },
-                    { "label": "Contact", "value": "contact" }
+                    {
+                      "label": "Home",
+                      "value": "home"
+                    },
+                    {
+                      "label": "About Us",
+                      "value": "about"
+                    },
+                    {
+                      "label": "Our Work",
+                      "value": "our-work"
+                    },
+                    {
+                      "label": "Our Impact",
+                      "value": "impact"
+                    },
+                    {
+                      "label": "Get Involved",
+                      "value": "get-involved"
+                    },
+                    {
+                      "label": "Stories & News",
+                      "value": "stories"
+                    },
+                    {
+                      "label": "Contact",
+                      "value": "contact"
+                    }
                   ]
                 },
                 {
@@ -231,15 +414,41 @@
                   "widget": "select",
                   "default": "landscape",
                   "options": [
-                    { "label": "Square", "value": "square" },
-                    { "label": "Portrait (tall)", "value": "portrait" },
-                    { "label": "Landscape (standard)", "value": "landscape" },
-                    { "label": "Wide banner (full width)", "value": "wide" }
+                    {
+                      "label": "Square",
+                      "value": "square"
+                    },
+                    {
+                      "label": "Portrait (tall)",
+                      "value": "portrait"
+                    },
+                    {
+                      "label": "Landscape (standard)",
+                      "value": "landscape"
+                    },
+                    {
+                      "label": "Wide banner (full width)",
+                      "value": "wide"
+                    }
                   ]
                 },
-                { "label": "Photo", "name": "image", "widget": "image" },
-                { "label": "Description for screen readers", "name": "alt", "widget": "string", "required": false },
-                { "label": "Caption shown under the photo", "name": "caption", "widget": "string", "required": false }
+                {
+                  "label": "Photo",
+                  "name": "image",
+                  "widget": "image"
+                },
+                {
+                  "label": "Description for screen readers",
+                  "name": "alt",
+                  "widget": "string",
+                  "required": false
+                },
+                {
+                  "label": "Caption shown under the photo",
+                  "name": "caption",
+                  "widget": "string",
+                  "required": false
+                }
               ]
             }
           ]
@@ -249,7 +458,7 @@
     {
       "name": "photos",
       "label": "Photos around the site",
-      "description": "Add a photo only where you have one. Any spot you leave out has its frame removed from the live site and the layout closes up around it \u2014 no empty boxes.",
+      "description": "Add a photo only where you have one. Any spot you leave out has its frame removed from the live site and the layout closes up around it — no empty boxes.",
       "files": [
         {
           "file": "content/images.json",
@@ -287,43 +496,43 @@
                   "widget": "select",
                   "options": [
                     {
-                      "label": "Accelerator 2026 \u2014 official programme graphic (Home + programme page)",
+                      "label": "Accelerator 2026 — official programme graphic (Home + programme page)",
                       "value": "accelerator-hero"
                     },
                     {
-                      "label": "Programme \u2014 Women's Empowerment (Home + Our Work)",
+                      "label": "Programme — Women's Empowerment (Home + Our Work)",
                       "value": "programme-women"
                     },
                     {
-                      "label": "Programme \u2014 Youth Development (Home + Our Work)",
+                      "label": "Programme — Youth Development (Home + Our Work)",
                       "value": "programme-youth"
                     },
                     {
-                      "label": "Programme \u2014 Health (Home)",
+                      "label": "Programme — Health (Home)",
                       "value": "programme-health"
                     },
                     {
-                      "label": "Programme \u2014 Education & Skills (Home + Our Work)",
+                      "label": "Programme — Education & Skills (Home + Our Work)",
                       "value": "programme-education"
                     },
                     {
-                      "label": "Programme \u2014 Economic Empowerment (Home + Our Work)",
+                      "label": "Programme — Economic Empowerment (Home + Our Work)",
                       "value": "programme-economic"
                     },
                     {
-                      "label": "Programme \u2014 Leadership (Home + Our Work)",
+                      "label": "Programme — Leadership (Home + Our Work)",
                       "value": "programme-leadership"
                     },
                     {
-                      "label": "Programme \u2014 Community Development (Home + Our Work)",
+                      "label": "Programme — Community Development (Home + Our Work)",
                       "value": "programme-community"
                     },
                     {
-                      "label": "Feature \u2014 Medical outreach band (Home + Our Work)",
+                      "label": "Feature — Medical outreach band (Home + Our Work)",
                       "value": "feature-health"
                     },
                     {
-                      "label": "Portrait \u2014 Rev. Dr. Jane Mwikali Makau (Home + About)",
+                      "label": "Portrait — Rev. Dr. Jane Mwikali Makau (Home + About)",
                       "value": "founder"
                     },
                     {
@@ -351,11 +560,11 @@
                       "value": "news-3"
                     },
                     {
-                      "label": "Contact \u2014 map or office photo",
+                      "label": "Contact — map or office photo",
                       "value": "contact-map"
                     },
                     {
-                      "label": "Story template \u2014 main photo",
+                      "label": "Story template — main photo",
                       "value": "story-template"
                     }
                   ]
@@ -387,7 +596,7 @@
               "label_singular": "Project",
               "required": false,
               "summary": "{{fields.project}}",
-              "hint": "Pick a project, then add as many photos as you have \u2014 one, three, six, or none. The first photo becomes the large one; the rest form a group underneath. A project with no photos shows no photo area at all.",
+              "hint": "Pick a project, then add as many photos as you have — one, three, six, or none. The first photo becomes the large one; the rest form a group underneath. A project with no photos shows no photo area at all.",
               "fields": [
                 {
                   "label": "Which project?",
@@ -395,71 +604,71 @@
                   "widget": "select",
                   "options": [
                     {
-                      "label": "Accelerator 2026 \u2014 programme gallery (Orientation, training, mentorship, KIRDI activities)",
+                      "label": "Accelerator 2026 — programme gallery (Orientation, training, mentorship, KIRDI activities)",
                       "value": "accelerator-2026"
                     },
                     {
-                      "label": "Women's Empowerment \u2014 Women's Entrepreneurship Seminars",
+                      "label": "Women's Empowerment — Women's Entrepreneurship Seminars",
                       "value": "p01"
                     },
                     {
-                      "label": "Women's Empowerment \u2014 Seed Capital for Women and Widows",
+                      "label": "Women's Empowerment — Seed Capital for Women and Widows",
                       "value": "p02"
                     },
                     {
-                      "label": "Youth Empowerment \u2014 Youth Media Training Workshops",
+                      "label": "Youth Empowerment — Youth Media Training Workshops",
                       "value": "p03"
                     },
                     {
-                      "label": "Health & Medical Outreach \u2014 Early Medical Camps",
+                      "label": "Health & Medical Outreach — Early Medical Camps",
                       "value": "p04"
                     },
                     {
-                      "label": "Education & Student Support \u2014 Kako Special School \u2014 Beds, Mattresses and Student",
+                      "label": "Education & Student Support — Kako Special School — Beds, Mattresses and Student",
                       "value": "p05"
                     },
                     {
-                      "label": "Water & Environment \u2014 Makueni Water Initiatives",
+                      "label": "Water & Environment — Makueni Water Initiatives",
                       "value": "p06"
                     },
                     {
-                      "label": "Water & Environment \u2014 Water Tank Donation in Makueni",
+                      "label": "Water & Environment — Water Tank Donation in Makueni",
                       "value": "p07"
                     },
                     {
-                      "label": "Water & Environment \u2014 Borehole Drilling Initiatives",
+                      "label": "Water & Environment — Borehole Drilling Initiatives",
                       "value": "p08"
                     },
                     {
-                      "label": "Community Development \u2014 CSR Projects Across 32 Counties",
+                      "label": "Community Development — CSR Projects Across 32 Counties",
                       "value": "p09"
                     },
                     {
-                      "label": "Humanitarian Support \u2014 Food Donations",
+                      "label": "Humanitarian Support — Food Donations",
                       "value": "p10"
                     },
                     {
-                      "label": "Health & Medical Outreach \u2014 Community Medical Camp \u2014 South B",
+                      "label": "Health & Medical Outreach — Community Medical Camp — South B",
                       "value": "p11"
                     },
                     {
-                      "label": "Health & Medical Outreach \u2014 South C Cancer Awareness & Screening",
+                      "label": "Health & Medical Outreach — South C Cancer Awareness & Screening",
                       "value": "p12"
                     },
                     {
-                      "label": "Health & Medical Outreach \u2014 Seven-County Free Wellness Medical Camp Initiative",
+                      "label": "Health & Medical Outreach — Seven-County Free Wellness Medical Camp Initiative",
                       "value": "p13"
                     },
                     {
-                      "label": "Humanitarian Support \u00b7 Water & Environment \u2014 Widows and Orphans Community Suppor",
+                      "label": "Humanitarian Support · Water & Environment — Widows and Orphans Community Suppor",
                       "value": "p14"
                     },
                     {
-                      "label": "Health & Medical Outreach \u2014 Foundation Medical Outreach \u2014 2023 Onward",
+                      "label": "Health & Medical Outreach — Foundation Medical Outreach — 2023 Onward",
                       "value": "p15"
                     },
                     {
-                      "label": "Women's Empowerment \u00b7 Community Development \u2014 External Excellencies Empowerment ",
+                      "label": "Women's Empowerment · Community Development — External Excellencies Empowerment ",
                       "value": "p16"
                     }
                   ]

@@ -196,7 +196,7 @@
           <textarea id="v-message" name="message" rows="4"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Submit interest</button>
-        <p class="form-note">This form has no backend connected yet — wire it to a form service (e.g. Formspree) before publishing.</p>
+        <p class="form-note" role="status" aria-live="polite"></p>
       </form>
     </div>
   </section>
@@ -339,6 +339,7 @@
   </div>
 </footer>
 
+<script src="supabase-config.js"></script>
 <script src="main.js"></script>
 <script src="get-involved.js"></script>
 <script src="site-images.js"></script>
