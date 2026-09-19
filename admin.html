@@ -356,7 +356,7 @@
     {
       "name": "custom_photos",
       "label": "Add your own photo frames",
-      "description": "Create a new photo frame yourself, anywhere on the site. Pick which page it belongs to, pick a shape, upload the photo, and Publish — it lands in that page's Photo gallery section, in the order you added it.",
+      "description": "Create a new photo frame yourself, anywhere on the site. Pick the page — and now the specific section within that page — pick a shape, upload the photo, and Publish. To take a photo down, click \"Remove\" on its card below, then Publish — that deletes it from the site immediately.",
       "files": [
         {
           "file": "content/custom-photos.json",
@@ -374,36 +374,76 @@
               "hint": "Delete an entry to remove that frame from the site.",
               "fields": [
                 {
-                  "label": "Which page does this go on?",
+                  "label": "Which page — and where on it?",
                   "name": "zone",
                   "widget": "select",
                   "options": [
                     {
-                      "label": "Home",
+                      "label": "Home — general gallery (bottom of page)",
                       "value": "home"
                     },
                     {
-                      "label": "About Us",
+                      "label": "About Us — general gallery (bottom of page)",
                       "value": "about"
                     },
                     {
-                      "label": "Our Work",
+                      "label": "Our Work — general gallery (bottom of page)",
                       "value": "our-work"
                     },
                     {
-                      "label": "Our Impact",
+                      "label": "Our Work — Women Empowerment section",
+                      "value": "our-work-women"
+                    },
+                    {
+                      "label": "Our Work — Youth Development section",
+                      "value": "our-work-youth"
+                    },
+                    {
+                      "label": "Our Work — Health & Wellness section",
+                      "value": "our-work-health"
+                    },
+                    {
+                      "label": "Our Work — Education & Skills section",
+                      "value": "our-work-education"
+                    },
+                    {
+                      "label": "Our Work — Economic Empowerment section",
+                      "value": "our-work-economic"
+                    },
+                    {
+                      "label": "Our Work — Leadership Development section",
+                      "value": "our-work-leadership"
+                    },
+                    {
+                      "label": "Our Work — Community Development section",
+                      "value": "our-work-community"
+                    },
+                    {
+                      "label": "Accelerator 2026 — general gallery (bottom of page)",
+                      "value": "accelerator-2026"
+                    },
+                    {
+                      "label": "Accelerator 2026 — Orientation day",
+                      "value": "accelerator-2026-orientation"
+                    },
+                    {
+                      "label": "Accelerator 2026 — Intensive five-day programme",
+                      "value": "accelerator-2026-fiveday"
+                    },
+                    {
+                      "label": "Our Impact — general gallery (bottom of page)",
                       "value": "impact"
                     },
                     {
-                      "label": "Get Involved",
+                      "label": "Get Involved — general gallery (bottom of page)",
                       "value": "get-involved"
                     },
                     {
-                      "label": "Stories & News",
+                      "label": "Stories & News — general gallery (bottom of page)",
                       "value": "stories"
                     },
                     {
-                      "label": "Contact",
+                      "label": "Contact — general gallery (bottom of page)",
                       "value": "contact"
                     }
                   ]

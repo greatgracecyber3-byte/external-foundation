@@ -194,3 +194,16 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 });
+
+// ---- Floating "Upcoming Project" badge — every page except the page it
+// links to, so people aren't invited to click through to where they already are.
+(function () {
+  var here = location.pathname.split('/').pop() || 'index.html';
+  if (here === 'accelerator-2026.html') return;
+  var a = document.createElement('a');
+  a.href = 'accelerator-2026.html';
+  a.className = 'floating-project-badge';
+  a.innerHTML = '<span class="fpb-dot" aria-hidden="true"></span><span class="fpb-text">Upcoming Project</span>';
+  a.setAttribute('aria-label', 'Upcoming project: Accelerator 2026');
+  document.body.appendChild(a);
+})();
