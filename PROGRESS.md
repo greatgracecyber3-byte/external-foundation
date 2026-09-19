@@ -12,6 +12,17 @@
   Steps are in `DASHBOARD-SETUP.md`.
 - Removed `config.yml` and the stray old Decap admin copy (`index (1).html`).
 
+## Sept 2026 — placeholders removed
+
+- Contact details filled in (address, phone, email, office hours 8:00 am – 5:00 pm).
+- Unfilled story cards, news cards, report listings, empty events, "coming soon"
+  stat cards, "[ADD …]" numbers, ghost partner chip and "link coming soon"
+  social links removed rather than filled — nothing was invented.
+- Homepage slider photos now sit directly in the page.
+- Donate panel replaced with a "contact us to donate" block until a real
+  payment method is connected.
+- `story-template.html` removed (it was entirely placeholders).
+
 ## What changed in this pass (verified against the site's own files, not just claimed)
 
 - **impact.html rebuilt as a real project database**: 16 documented projects, each in an
